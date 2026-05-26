@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Political Map — Interactive Teaching Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- D3.js for rendering high-fidelity map shapes -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1008;
+  --paper:#f5ede0;
+  --aged:#e8d5b5;
+  --border-warm:#c4995a;
+  --gold:#b8860b;
+  --gold-light:#d4a843;
+  --rust:#8b3a1a;
+  --teal:#1a5c5c;
+  --teal-light:#2a8080;
+  --cream:#faf3e8;
+  --muted:#7a6040;
+  --sea:#b8d4e8;
+  --sea-deep:#7fb0cc;
+  --accent:#c0392b;
+  --green-state:#2d6a2d;
+  --state-base:#c8d89a;
+  --state-hover:#a8c060;
+  --state-active:#e8a020;
+  --state-stroke:#6a5020;
+  --shadow:rgba(80,40,10,0.25);
+}
+
+body{
+  font-family:'Crimson Pro',Georgia,serif;
+  background:var(--ink);
+  color:var(--ink);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ─── HEADER ─── */
+#header{
+  background:linear-gradient(135deg,#1a0a04 0%,#2d1208 50%,#1a0a04 100%);
+  border-bottom:3px solid var(--gold);
+  padding:.5rem 1.2rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  flex-shrink:0;
+  position:relative;
+}
+#header::after{
+  content:'';
+  position:absolute;
+  bottom:-6px;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+}
+#header h1{
+  font-family:'Cinzel',serif;
+  font-size:1.15rem;
+  color:var(--gold-light);
+  font-weight:700;
+  letter-spacing:.08em;
+  line-height:1.2;
+}
+#header .subtitle{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  color:#8a7050;
+  letter-spacing:.12em;
+  margin-top:.1rem;
+}
+.header-controls{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+}
+.tts-btn{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  background:rgba(212,168,67,.12);
+  border:1px solid var(--gold);
+  border-radius:6px;
+  color:var(--gold-light);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  padding:.32rem .75rem;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.05em;
+}
+.tts-btn:hover{background:rgba(212,168,67,.22);}
+.tts-btn.speaking{background:rgba(192,57,43,.2);border-color:var(--accent);color:#e07060;animation:pulse-btn 1.2s infinite;}
+@keyframes pulse-btn{0%,100%{opacity:1}50%{opacity:.6}}
+.hint-chip{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;
+  color:#7a6040;
+  background:rgba(255,255,255,.04);
+  border:1px solid #3a2010;
+  border-radius:5px;
+  padding:.25rem .6rem;
+}
+.hint-chip kbd{
+  background:#2a1a0a;
+  border:1px solid #5a3a1a;
+  border-radius:3px;
+  padding:1px 5px;
+  color:var(--gold-light);
+  font-size:.58rem;
+}
+
+/* ─── LAYOUT ─── */
+#layout{display:flex;flex:1;overflow:hidden;}
+
+/* ─── SIDEBAR ─── */
+#side{
+  width:220px;
+  min-width:200px;
+  background:linear-gradient(180deg,#1e0e05 0%,#150a03 100%);
+  border-right:2px solid #3a2010;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  flex-shrink:0;
+}
+#panel-toggle{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.5rem .9rem;
+  cursor:pointer;
+  background:#2a1208;
+  border-bottom:1px solid #3a2010;
+  user-select:none;
+  flex-shrink:0;
+}
+#panel-toggle span.pt{
+  font-family:'Cinzel',serif;
+  font-size:.62rem;
+  letter-spacing:.15em;
+  color:var(--gold-light);
+  flex:1;
+  text-transform:uppercase;
+}
+#panel-toggle .arrow{color:var(--gold);font-size:.75rem;transition:transform .25s;}
+#panel-toggle.collapsed .arrow{transform:rotate(-90deg);}
+#panel-inner{flex:1;overflow-y:auto;}
+#panel-inner.hidden{display:none;}
+#panel-inner::-webkit-scrollbar{width:4px;}
+#panel-inner::-webkit-scrollbar-thumb{background:#3a2010;border-radius:2px;}
+.psect{
+  font-family:'Cinzel',serif;
+  font-size:.54rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold);
+  padding:.4rem .9rem .2rem;
+  border-bottom:1px solid #2a1a0a;
+  background:#1a0a02;
+}
+.sci{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.22rem .75rem;
+  cursor:pointer;
+  transition:background .15s;
+  border-left:3px solid transparent;
+}
+.sci:hover{background:#2a1208;}
+.sci.active{background:rgba(184,134,11,.12);border-left-color:var(--gold);}
+.sck{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  font-weight:600;
+  background:#1a0e04;
+  border:1px solid #3a2510;
+  border-radius:3px;
+  padding:1px 5px;
+  color:var(--gold-light);
+  min-width:30px;
+  text-align:center;
+  flex-shrink:0;
+}
+.sci.active .sck{background:rgba(184,134,11,.2);border-color:var(--gold);color:var(--gold-light);}
+.scn{font-family:'Crimson Pro',serif;font-size:.8rem;color:#c8b090;line-height:1.2;}
+.sci.active .scn{color:#f0d88a;}
+.scut{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.5rem;
+  color:#6a5030;
+  background:#1a0e04;
+  border-radius:2px;
+  padding:1px 3px;
+  margin-left:auto;
+  flex-shrink:0;
+}
+
+/* ─── MAP AREA ─── */
+#map-area{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(100,160,200,.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 80%, rgba(100,160,200,.12) 0%, transparent 50%),
+    linear-gradient(160deg,#0d1a24 0%,#0a1520 40%,#081018 100%);
+}
+/* grid lines for map feel */
+#map-area::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(180,210,230,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,210,230,.04) 1px,transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+}
+
+#map-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+}
+
+#map-svg{
+  height:calc(100vh - 58px);
+  max-height:100%;
+  max-width:100%;
+  width:auto;
+  filter:drop-shadow(0 8px 40px rgba(0,0,0,.7));
+}
+
+#loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: var(--gold-light);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ─── STATE PATHS (D3 Rendered) ─── */
+.st{
+  fill:#3a6b3a;
+  stroke:#1a3a1a;
+  stroke-width: 1.2px;
+  cursor:pointer;
+  transition:fill .2s, stroke-width .15s, filter .2s;
+  stroke-linejoin:round;
+}
+.st[data-region="South India"]{fill:#4a7c3a;}
+.st[data-region="North India"]{fill:#6b8c3a;}
+.st[data-region="East India"]{fill:#3a7c5c;}
+.st[data-region="West India"]{fill:#7c8c3a;}
+.st[data-region="Central India"]{fill:#8c7c3a;}
+.st[data-region="Northeast India"]{fill:#3a7c6b;}
+.st[data-region="Bay of Bengal"]{fill:#4a6b8c;}
+.st[data-region="Arabian Sea"]{fill:#4a6b8c;}
+
+.st:hover{
+  fill:#c8a820 !important;
+  stroke:#f0c840;
+  stroke-width: 2.5px;
+  filter:drop-shadow(0 0 4px rgba(200,168,32,.5));
+}
+.st.lit{
+  fill:#e8a020 !important;
+  stroke:#ffd060;
+  stroke-width: 3px;
+  filter:drop-shadow(0 0 8px rgba(240,180,30,.8));
+}
+.st.dim{
+  fill:#1a3020 !important;
+  stroke:#0d1a10;
+  opacity:.45;
+}
+.st.ut-shape{
+  stroke-dasharray: 4 3;
+}
+
+.sl{
+  font-family:'JetBrains Mono',monospace;
+  font-size: 13px;
+  fill:#a0c878;
+  pointer-events:none;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+.sl.lit{fill:#fff700;font-size:18px;}
+.sl.dim{fill:#3a5a3a;opacity:.4;}
+
+/* ─── SEA LABELS ─── */
+.sea-label{
+  font-family:'Cinzel',serif;
+  font-size: 22px;
+  fill:rgba(150,200,230,.35);
+  pointer-events:none;
+  text-anchor:middle;
+  font-style:italic;
+  letter-spacing:.08em;
+}
+/* ─── COMPASS ROSE ─── */
+.compass{pointer-events:none;}
+
+/* ─── STATUS BAR ─── */
+#status{
+  position:absolute;
+  top:.65rem;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'Crimson Pro',serif;
+  font-size:.82rem;
+  background:rgba(10,15,20,.85);
+  border:1px solid #2a4020;
+  border-radius:20px;
+  padding:.28rem 1rem;
+  color:#a0c878;
+  white-space:nowrap;
+  z-index:5;
+  backdrop-filter:blur(4px);
+}
+#status b{color:var(--gold-light);}
+
+#key-ind{
+  position:absolute;
+  bottom:1rem;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.4rem;
+  font-weight:600;
+  color:var(--gold-light);
+  background:rgba(10,15,20,.9);
+  border:2px solid var(--gold);
+  border-radius:8px;
+  padding:.32rem 1.2rem;
+  letter-spacing:.3em;
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;
+}
+#key-ind.show{opacity:1;}
+
+/* ─── LEGEND ─── */
+#legend{
+  position:absolute;
+  bottom:.8rem;
+  right:.8rem;
+  background:rgba(8,12,18,.88);
+  border:1px solid #2a3a1a;
+  border-radius:8px;
+  padding:.5rem .75rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.55rem;
+  color:#6a8a5a;
+  backdrop-filter:blur(4px);
+}
+#legend .lt{font-family:'Cinzel',serif;font-size:.58rem;color:#8a9a6a;letter-spacing:.1em;margin-bottom:.35rem;}
+.legend-row{display:flex;align-items:center;gap:.4rem;margin:.18rem 0;}
+.legend-swatch{width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,.1);}
+
+/* ─── OVERLAY ─── */
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:90;backdrop-filter:blur(3px);}
+#overlay.show{display:block;}
+
+/* ─── POPUP ─── */
+#popup{
+  display:none;
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(640px,95vw);
+  max-height:90vh;
+  background:linear-gradient(160deg,#fffdf6 0%,#f5ede0 100%);
+  border:2px solid var(--border-warm);
+  border-radius:16px;
+  box-shadow:0 40px 100px rgba(0,0,0,.85), 0 0 0 1px rgba(184,134,11,.3), inset 0 1px 0 rgba(255,255,255,.6);
+  z-index:100;
+  overflow:hidden;
+  flex-direction:column;
+  color:var(--ink);
+}
+#popup.show{display:flex;animation:popIn .22s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{opacity:0;transform:translate(-50%,-46%) scale(.93)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+/* popup header */
+.ph{
+  background:linear-gradient(135deg,#1a0a04 0%,#2d1208 60%,#3a1a08 100%);
+  padding:.9rem 1.2rem;
+  border-bottom:3px solid var(--gold);
+  flex-shrink:0;
+  position:relative;
+  overflow:hidden;
+}
+.ph::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(212,168,67,.5),transparent);
+}
+.phtop{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;}
+.phname{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--gold-light);font-weight:700;line-height:1.15;}
+.phcode{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7a5030;margin-top:.15rem;letter-spacing:.12em;}
+.ph-badges{display:flex;gap:.4rem;margin-top:.3rem;flex-wrap:wrap;}
+.phbadge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.56rem;
+  padding:2px 8px;
+  border-radius:20px;
+  background:rgba(212,168,67,.15);
+  border:1px solid rgba(212,168,67,.4);
+  color:var(--gold-light);
+}
+.phbadge.ut{background:rgba(42,128,128,.15);border-color:rgba(42,128,128,.4);color:#2a8080;}
+.ph-right{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex-shrink:0;}
+.phclose{
+  background:rgba(255,255,255,.05);
+  border:1px solid #5a3a1a;
+  border-radius:6px;
+  color:#c8a080;
+  cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  padding:4px 9px;
+  transition:all .15s;
+}
+.phclose:hover{background:rgba(255,255,255,.1);color:var(--gold-light);}
+.tts-read-btn{
+  display:flex;align-items:center;gap:.3rem;
+  background:rgba(42,128,128,.15);
+  border:1px solid rgba(42,128,128,.4);
+  border-radius:6px;
+  color:#4aa090;
+  cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  padding:4px 9px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.tts-read-btn:hover{background:rgba(42,128,128,.25);}
+.tts-read-btn.reading{background:rgba(192,57,43,.15);border-color:rgba(192,57,43,.4);color:#e07060;animation:pulse-btn 1.2s infinite;}
+
+/* popup body */
+.pb{flex:1;overflow-y:auto;padding:1rem 1.2rem;}
+.pb::-webkit-scrollbar{width:5px;}
+.pb::-webkit-scrollbar-thumb{background:var(--border-warm);border-radius:3px;}
+
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem;}
+.pstat{
+  background:rgba(184,134,11,.07);
+  border:1px solid rgba(184,134,11,.2);
+  border-radius:8px;
+  padding:.55rem .85rem;
+}
+.psl{font-family:'JetBrains Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.18rem;}
+.psv{font-family:'Crimson Pro',serif;font-size:.92rem;color:var(--ink);font-weight:600;}
+
+.psec{margin-bottom:.85rem;}
+.pstitle{
+  font-family:'Cinzel',serif;
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--rust);
+  margin-bottom:.38rem;
+  padding-bottom:.25rem;
+  border-bottom:1px solid rgba(184,134,11,.2);
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+}
+.pstitle .icon{font-size:.9rem;}
+.psbody{font-family:'Crimson Pro',serif;font-size:.9rem;line-height:1.7;color:#2a1a08;}
+.psbody ul{list-style:none;padding:0;}
+.psbody ul li{padding:.1rem 0 .1rem 1.1rem;position:relative;}
+.psbody ul li::before{content:"▸";color:var(--gold);position:absolute;left:0;font-size:.65rem;top:.2rem;}
+
+.pfact{
+  background:linear-gradient(135deg,rgba(42,128,128,.08),rgba(42,128,128,.04));
+  border:1px solid rgba(42,128,128,.25);
+  border-left:3px solid var(--teal);
+  border-radius:8px;
+  padding:.65rem .9rem;
+  margin-top:.75rem;
+}
+.pftitle{font-family:'Cinzel',serif;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:.22rem;}
+.pfbody{font-family:'Crimson Pro',serif;font-size:.88rem;line-height:1.7;color:#1a2a2a;}
+
+.pfoot{
+  border-top:1px solid rgba(184,134,11,.2);
+  padding:.45rem 1.2rem;
+  display:flex;
+  gap:1rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;
+  color:var(--muted);
+  flex-shrink:0;
+  background:rgba(184,134,11,.04);
+}
+.pfoot kbd{background:var(--aged);border:1px solid var(--border-warm);border-radius:3px;padding:1px 5px;color:var(--rust);}
+
+/* ─── TTS INDICATOR ─── */
+#tts-bar{
+  position:absolute;
+  bottom:3.5rem;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(10,15,20,.9);
+  border:1px solid var(--teal-light);
+  border-radius:20px;
+  padding:.3rem .9rem;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  color:var(--teal-light);
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;
+  z-index:6;
+  white-space:nowrap;
+}
+#tts-bar.visible{opacity:1;}
+.tts-wave{display:flex;align-items:center;gap:2px;}
+.tts-wave span{display:inline-block;width:3px;background:var(--teal-light);border-radius:2px;animation:wave 0.8s ease-in-out infinite;}
+.tts-wave span:nth-child(1){height:6px;animation-delay:0s;}
+.tts-wave span:nth-child(2){height:10px;animation-delay:.15s;}
+.tts-wave span:nth-child(3){height:14px;animation-delay:.3s;}
+.tts-wave span:nth-child(4){height:10px;animation-delay:.45s;}
+.tts-wave span:nth-child(5){height:6px;animation-delay:.6s;}
+@keyframes wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+
+#live{position:absolute;left:-9999px;top:-9999px;}
+
+/* responsive */
+@media(max-width:700px){
+  #side{display:none;}
+  .pgrid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div id="live" aria-live="polite" aria-atomic="true"></div>
+
+<header id="header">
+  <div>
+    <h1>🇮🇳 INDIA — Political Map</h1>
+    <div class="subtitle">INTERACTIVE TEACHING TOOL &nbsp;·&nbsp; HIGH FIDELITY RENDER</div>
+  </div>
+  <div class="header-controls">
+    <div class="hint-chip">Type <kbd>KL</kbd> <kbd>UP</kbd> <kbd>MH</kbd> to locate &nbsp;|&nbsp; <kbd>Enter</kbd> details &nbsp;|&nbsp; <kbd>Esc</kbd> clear</div>
+    <button class="tts-btn" id="tts-toggle" onclick="toggleTTS()" title="Toggle text-to-speech auto-read">
+      <span id="tts-icon">🔊</span> <span id="tts-label">TTS: OFF</span>
+    </button>
+  </div>
+</header>
+
+<div id="layout">
+  <nav id="side" aria-label="State shortcuts">
+    <div id="panel-toggle" role="button" aria-expanded="true" aria-controls="panel-inner" tabindex="0">
+      <span class="pt">Shortcut Reference</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div id="panel-inner"></div>
+  </nav>
+
+  <main id="map-area" tabindex="0" aria-label="India political map">
+    <div id="status" role="status" aria-live="polite">Click any state or type a shortcut — e.g. <b>KL</b> Kerala &nbsp;·&nbsp; <b>UP</b> Uttar Pradesh</div>
+    
+    <div id="map-wrap">
+      <div id="loading-indicator">
+        Loading High-Fidelity Geographical Data...<br>
+        <span style="font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; opacity: 0.8;">Fetching exact borders</span>
+      </div>
+      
+      <!-- Base SVG adjusted for high-res D3 rendering -->
+      <svg id="map-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <!-- Ocean / Aesthetic Elements Layer -->
+        <g id="decor-layer">
+            <text class="sea-label" x="180" y="650">Arabian Sea</text>
+            <text class="sea-label" x="850" y="600">Bay of Bengal</text>
+            <text class="sea-label" x="500" y="920">Indian Ocean</text>
+
+            <!-- Compass scaled up for new viewport -->
+            <g class="compass" transform="translate(850, 150) scale(18)">
+              <circle cx="0" cy="0" r="1.5" fill="none" stroke="rgba(200,180,100,.3)" stroke-width=".15"/>
+              <polygon points="0,-1.3 0.25,-0.3 -0.25,-0.3" fill="rgba(200,80,80,.7)"/>
+              <polygon points="0,1.3 0.25,0.3 -0.25,0.3" fill="rgba(200,180,100,.4)"/>
+              <polygon points="-1.3,0 -0.3,0.25 -0.3,-0.25" fill="rgba(200,180,100,.4)"/>
+              <polygon points="1.3,0 0.3,0.25 0.3,-0.25" fill="rgba(200,180,100,.4)"/>
+              <text x="0" y="-1.7" text-anchor="middle" font-family="Cinzel,serif" font-size="0.9px" fill="rgba(200,180,100,.7)">N</text>
+            </g>
+        </g>
+
+        <!-- D3 Map Path Elements will be injected here -->
+        <g id="map-g"></g>
+      </svg>
+    </div>
+
+    <div id="key-ind" aria-hidden="true"></div>
+    <div id="tts-bar">
+      <div class="tts-wave"><span></span><span></span><span></span><span></span><span></span></div>
+      <span id="tts-reading-text">Reading…</span>
+      <button onclick="stopTTS()" style="background:rgba(192,57,43,.3);border:1px solid rgba(192,57,43,.5);color:#e07060;border-radius:4px;padding:2px 8px;font-family:JetBrains Mono,monospace;font-size:.55rem;cursor:pointer;margin-left:.5rem;">■ Stop</button>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend">
+      <div class="lt">REGIONS</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#4a7c3a;"></div> South India</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#6b8c3a;"></div> North India</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#3a7c5c;"></div> East India</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#7c8c3a;"></div> West India</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#8c7c3a;"></div> Central India</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#3a7c6b;"></div> Northeast</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#4a6b8c;"></div> Island UT</div>
+      <div style="margin-top:.35rem;border-top:1px solid #2a3a1a;padding-top:.35rem;">
+        <div class="legend-row"><div class="legend-swatch" style="background:#1a3020;border:1px dashed #4a6a3a;"></div> Union Territory</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" role="presentation"></div>
+
+<!-- POPUP DETAIL PANEL -->
+<div id="popup" role="dialog" aria-modal="true" aria-labelledby="pop-name">
+  <div class="ph">
+    <div class="phtop">
+      <div>
+        <div class="phname" id="pop-name"></div>
+        <div class="phcode" id="pop-code"></div>
+        <div class="ph-badges">
+          <span class="phbadge" id="pop-badge-type"></span>
+          <span class="phbadge" id="pop-badge-region"></span>
+        </div>
+      </div>
+      <div class="ph-right">
+        <button class="phclose" id="pop-close" aria-label="Close">ESC / ✕</button>
+        <button class="tts-read-btn" id="tts-read-btn" onclick="readStateAloud()">🔊 Read Aloud</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb">
+    <!-- Quick stats grid -->
+    <div class="pgrid">
+      <div class="pstat"><div class="psl">Capital City</div><div class="psv" id="pop-capital"></div></div>
+      <div class="pstat"><div class="psl">Official Language(s)</div><div class="psv" id="pop-lang"></div></div>
+      <div class="pstat"><div class="psl">Total Area</div><div class="psv" id="pop-area"></div></div>
+      <div class="pstat"><div class="psl">Region</div><div class="psv" id="pop-region"></div></div>
+    </div>
+
+    <!-- Sections -->
+    <div class="psec">
+      <div class="pstitle"><span class="icon">📍</span> Location &amp; Geography</div>
+      <div class="psbody" id="pop-loc"></div>
+    </div>
+    <div class="psec">
+      <div class="pstitle"><span class="icon">🏛️</span> Major Attractions</div>
+      <div class="psbody" id="pop-attr"></div>
+    </div>
+    <div class="psec">
+      <div class="pstitle"><span class="icon">🌟</span> Key Contributions to India</div>
+      <div class="psbody" id="pop-contrib"></div>
+    </div>
+    <div class="psec">
+      <div class="pstitle"><span class="icon">🍛</span> Food &amp; Culture</div>
+      <div class="psbody" id="pop-culture"></div>
+    </div>
+    <div class="pfact">
+      <div class="pftitle">⭐ DID YOU KNOW?</div>
+      <div class="pfbody" id="pop-fact"></div>
+    </div>
+  </div>
+
+  <div class="pfoot">
+    <span><kbd>Esc</kbd> close</span>
+    <span><kbd>←</kbd><kbd>→</kbd> prev / next state</span>
+    <span><kbd>Tab</kbd> navigate</span>
+    <span><kbd>Space</kbd> read aloud</span>
+  </div>
+</div>
+
+<script>
+// ─── DATA (Kept perfectly intact for logic mapping) ────────────────────────
+const STATES=[
+{id:"AP",name:"Andhra Pradesh",code:"AP",type:"State",capital:"Amaravati",region:"South India",lang:"Telugu",area:"1,62,975 km²",loc:"Located on the southeastern coast of India along the Bay of Bengal. Bordered by Telangana and Chhattisgarh to the north, Odisha to the northeast, Karnataka and Tamil Nadu to the west and south.",attr:["Tirumala Venkateswara Temple, Tirupati — world's most visited pilgrimage site","Araku Valley — scenic hill station with tribal culture","Borra Caves — ancient limestone caves","Vijayawada — historical city on the Krishna River","Nagarjunakonda — ancient Buddhist heritage site"],contrib:["Known as the 'Rice Bowl of India' — major rice-producing state","Tirupati temple is the world's richest, receiving over ₹1,000 crore annually","Major IT corridor in Vizag and Amaravati region","Leading producer of tobacco, sugarcane, chillies, and cotton"],culture:"Famous for Pesarattu, Gongura pachadi, and Hyderabadi-style biryani. Known for Kuchipudi classical dance, Kalamkari textile art, and Kondapalli wooden toys.",fact:"The Tirumala Venkateswara Temple in Tirupati receives over 50,000 devotees every single day — more than the Vatican or Mecca — making it the most visited place of worship on Earth!"},
+{id:"AR",name:"Arunachal Pradesh",code:"AR",type:"State",capital:"Itanagar",region:"Northeast India",lang:"English, Nyishi, Adi, Bengali",area:"83,743 km²",loc:"The easternmost state of India — the first place in India to see the sunrise each day. Shares borders with Bhutan, China, and Myanmar. Called 'Land of the Rising Sun'.",attr:["Tawang Monastery — largest monastery in India","Ziro Valley — UNESCO World Heritage nominated","Namdapha National Park — rich biodiversity","Sela Pass — high-altitude mountain pass","Mechuka Valley — remote and breathtaking"],contrib:["Strategically crucial for India's northeastern border","One of the world's 36 biodiversity hotspots","Enormous hydroelectric power potential","Home to 26 major tribes preserving unique ancient cultures"],culture:"Famous for Thukpa, Apong rice beer, and bamboo shoot dishes. Known for colourful tribal festivals like Losar and Ponung dance.",fact:"Arunachal Pradesh is larger than the entire country of Austria! It is home to Kibithoo, the easternmost town in India, where the sun rises first in the country."},
+{id:"AS",name:"Assam",code:"AS",type:"State",capital:"Dispur",region:"Northeast India",lang:"Assamese, Bengali, Bodo",area:"78,438 km²",loc:"Located in the Brahmaputra river valley in northeast India — the gateway to the Seven Sister States. Shares borders with Bhutan, Bangladesh, and six Indian states.",attr:["Kaziranga National Park — UNESCO World Heritage Site","Majuli Island — world's largest river island","Kamakhya Temple — famous Shakti pilgrimage site","Manas National Park — UNESCO World Heritage","Tea Gardens of Jorhat and Dibrugarh"],contrib:["World-famous Assam tea — largest tea-producing region in India","Kaziranga shelters two-thirds of Earth's one-horned rhinoceroses","Digboi has India's oldest operational oil refinery, established in 1889","Muga silk is the world's rarest golden-yellow silk, found nowhere else"],culture:"Famous for Masor Tenga, Pitha rice cakes, and Jolpan. Known for Bihu festival, Sattriya dance recognised by UNESCO, and bamboo craft.",fact:"Assam's Muga silk is a golden-yellow natural silk unique to this state — it gets more lustrous and stronger with every wash! Kaziranga has more rhinos per square kilometre than anywhere else on Earth."},
+{id:"BR",name:"Bihar",code:"BR",type:"State",capital:"Patna",region:"East India",lang:"Hindi, Maithili, Bhojpuri",area:"94,163 km²",loc:"Located in the eastern Indo-Gangetic plains, bordered by Nepal, Uttar Pradesh, Jharkhand, and West Bengal. The sacred Ganga river flows through Bihar.",attr:["Bodh Gaya — where Lord Buddha attained enlightenment, a UNESCO World Heritage Site","Nalanda — ruins of the ancient world's greatest university","Rajgir — historic city of the Magadha kingdom","Vaishali — birthplace of Lord Mahavira, founder of Jainism","Patna Sahib — sacred Sikh Gurudwara"],contrib:["Birthplace of two world religions: Buddhism and Jainism","Nalanda University was one of the world's first residential universities with 10,000 students","The Magadha Empire unified most of ancient India under Chandragupta Maurya and Ashoka","Major vegetable and fruit producer for eastern India"],culture:"Famous for Litti Chokha, Sattu drink, and Thekua festive sweet. Known for Madhubani painting, Chhath Puja festival, and Sonepur Mela — Asia's largest cattle fair.",fact:"Chhath Puja is the only major Hindu festival where worship is offered directly to the rising and setting Sun at a riverbank — with no idol or priest required. It is one of the most ancient sun-worship traditions still practiced today!"},
+{id:"CG",name:"Chhattisgarh",code:"CG",type:"State",capital:"Raipur",region:"Central India",lang:"Hindi, Chhattisgarhi",area:"1,35,192 km²",loc:"A large landlocked state in central India, carved out of Madhya Pradesh in 2000. About 44% of the state is covered by dense forest.",attr:["Chitrakote Falls — India's widest waterfall, the Niagara of India","Kanger Valley National Park","Bastar — famous for unique tribal culture","Sirpur — ancient Buddhist-Hindu heritage town","Barnawapara Wildlife Sanctuary"],contrib:["Called the 'Rice Bowl of Central India'","Contributes about 15% of India's total steel production","Vast mineral wealth including coal, iron ore, limestone, and bauxite","Dense forests produce timber, tendu leaves, and bamboo"],culture:"Famous for Chila rice pancakes, Bafauri steamed lentil dumplings, and Aamat tribal curry. Known for Bastar tribal art, Dhokra metal casting — a 3,000-year-old technique — and Panthi and Karma folk dances.",fact:"Chhattisgarh has one of India's highest tribal populations at over 30%. Its Bastar Dussehra is the world's longest-running festival, celebrated over 75 days — far longer than any other Dussehra in India!"},
+{id:"GA",name:"Goa",code:"GA",type:"State",capital:"Panaji",region:"West India",lang:"Konkani, Marathi, English",area:"3,702 km²",loc:"India's smallest state by area, on the western Konkan coast. Bordered by Maharashtra, Karnataka, and the Arabian Sea. It was a Portuguese colony for 451 years until liberated in 1961.",attr:["Baga, Calangute, Anjuna, and Palolem Beaches","Basilica of Bom Jesus — UNESCO World Heritage","Dudhsagar Waterfalls — one of India's tallest","Old Goa Churches and Convents — UNESCO Heritage","Goa Carnival — vibrant annual festival"],contrib:["Highest per capita income among all Indian states","India's top tourism destination contributing significantly to foreign exchange","Major cashew and spice exporter","Preserved rare Portuguese-Goan architectural and cultural heritage","Important fishing and seafood industry"],culture:"Famous for Fish Curry Rice, Bebinca layered coconut dessert, and Feni liquor. Known for Konkani music, Dekhnni and Fugdi folk dances, and a unique blend of Hindu and Portuguese traditions.",fact:"Goa was under Portuguese colonial rule for 451 years from 1510 to 1961 — longer than the British ruled any other part of India! The Indian Army liberated it in just 2 days in Operation Vijay on 19 December 1961."},
+{id:"GJ",name:"Gujarat",code:"GJ",type:"State",capital:"Gandhinagar",region:"West India",lang:"Gujarati",area:"1,96,024 km²",loc:"Located in western India with India's longest coastline of over 1,600 kilometres. Bordered by Rajasthan, Madhya Pradesh, Maharashtra, Pakistan, and the Arabian Sea.",attr:["Gir National Park — the only habitat of wild Asiatic lions in the world","Rann of Kutch — world's largest salt desert","Statue of Unity — world's tallest statue at 182 metres","Somnath Temple — first of the 12 Jyotirlingas","Dwarkadhish Temple — one of the four Char Dham"],contrib:["India's largest pharmaceutical hub, the Pharmacy of the World","Surat processes over 90% of the world's rough diamonds","Amul cooperative is the world's largest milk cooperative","Major petrochemical and chemical industry centre","Birthplace of Mahatma Gandhi and Sardar Vallabhbhai Patel"],culture:"Famous for Dhokla, Thepla, Fafda-Jalebi, and Khakhra. Known for Garba and Dandiya Raas dance during Navratri, Bandhani tie-dye, Patola silk weaving, and Rogan art from Kutch.",fact:"The Statue of Unity in Gujarat is the world's tallest statue at 182 metres — twice the height of the Statue of Liberty! It is a tribute to Sardar Vallabhbhai Patel who unified 562 princely states into modern India."},
+{id:"HR",name:"Haryana",code:"HR",type:"State",capital:"Chandigarh",region:"North India",lang:"Hindi, Haryanvi",area:"44,212 km²",loc:"Located in northern India, Haryana almost completely surrounds Delhi on three sides. Bordered by Punjab, Himachal Pradesh, Uttarakhand, Uttar Pradesh, and Rajasthan.",attr:["Kurukshetra — site of the great Mahabharata war","Brahma Sarovar — sacred lake at Kurukshetra","Sultanpur Bird Sanctuary","Pinjore Gardens","Surajkund — annual international crafts fair"],contrib:["One of India's leading states in wheat and rice production","Gurugram and Faridabad are major IT, automobile, and manufacturing hubs","Produces the most Olympic medal-winning wrestlers and athletes per capita","Leads India in milk and dairy production per capita"],culture:"Famous for Bajre ki Khichdi, Kadhi pakoda, and Besan masala roti. Known for Phulkari embroidery, Haryanvi folk songs, and a strong wrestling and sports culture.",fact:"Haryana is India's sports powerhouse, producing more Olympic and Commonwealth Games medal winners per capita than almost any other state. Neeraj Chopra from Haryana won India's first athletics gold medal at the Tokyo Olympics 2020!"},
+{id:"HP",name:"Himachal Pradesh",code:"HP",type:"State",capital:"Shimla / Dharamshala",region:"North India",lang:"Hindi, Pahari, Punjabi",area:"55,673 km²",loc:"A mountainous state in the western Himalayas, bordered by Jammu and Kashmir, Punjab, Haryana, Uttarakhand, and China. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Shimla — former summer capital of British India","Manali and Rohtang Pass — adventure tourism","Spiti Valley — remote cold desert landscape","Dharamshala — home of the Dalai Lama in exile","Khajjiar — called India's mini-Switzerland"],contrib:["Major apple producer contributing over 25% of India's total apple output","Significant hydroelectric power generation for northern India","Key centre for Tibetan Buddhism in India","Important hill station tourism hub"],culture:"Famous for Siddu steamed wheat bread, Madra chickpea curry, and Dham grand festival feast. Known for Kinnauri and Kullu shawls, Nati folk dance, and Chamba Rumal embroidery.",fact:"Himachal Pradesh's Nati dance holds a Guinness World Record for being performed simultaneously by over 10,000 dancers at one event!"},
+{id:"JH",name:"Jharkhand",code:"JH",type:"State",capital:"Ranchi",region:"East India",lang:"Hindi, Santali, Bengali",area:"79,716 km²",loc:"Located in eastern India on the Chota Nagpur Plateau, carved out of southern Bihar in 2000. Bordered by Bihar, West Bengal, Odisha, Chhattisgarh, and Uttar Pradesh.",attr:["Hundru Falls — beautiful waterfall near Ranchi","Betla National Park — tigers and elephants","Deoghar — important Jyotirlinga temple","Netarhat — Queen of Chotanagpur hill station","Jonha Gautamdhara Falls"],contrib:["India's mineral capital holding nearly 40% of the country's entire mineral reserves","Major coal, iron ore, copper, uranium, and mica producer","TATA Steel in Jamshedpur — one of Asia's largest integrated steel plants","Chhau dance, a UNESCO Intangible Cultural Heritage, originated here"],culture:"Famous for Thekua, Dhuska fried rice-lentil bread, and Litti Chokha. Known for Sohrai and Khovar tribal wall painting, Chhau mask dance, and Sarhul and Karma tribal festivals.",fact:"Jamshedpur in Jharkhand was built by TATA Steel in 1907 and is India's best-known planned industrial city."},
+{id:"KA",name:"Karnataka",code:"KA",type:"State",capital:"Bengaluru",region:"South India",lang:"Kannada",area:"1,91,791 km²",loc:"Located in the Deccan Plateau of southwestern India. Bordered by Goa, Maharashtra, Telangana, Andhra Pradesh, Tamil Nadu, Kerala, and the Arabian Sea.",attr:["Hampi — UNESCO World Heritage, ancient Vijayanagara Empire capital","Mysore Palace — one of India's most visited monuments","Coorg — coffee and spice plantations","Jog Falls — one of India's highest waterfalls","Bengaluru — Silicon Valley of India"],contrib:["India's IT capital: Bengaluru hosts nearly 35% of India's IT and software exports","Largest producer of coffee in India","ISRO, India's space research organisation, is headquartered in Bengaluru","HAL, India's major aircraft manufacturer, is based here"],culture:"Famous for Bisi Bele Bath, Masala Dosa, Ragi Mudde, and Mysore Pak sweet. Known for Yakshagana theatre, Mysore Dasara festival, and Channapatna wooden toy craft.",fact:"Bengaluru is India's IT capital earning more foreign exchange from software exports than any other city. ISRO, which launched the Chandrayaan missions is located here."},
+{id:"KL",name:"Kerala",code:"KL",type:"State",capital:"Thiruvananthapuram",region:"South India",lang:"Malayalam",area:"38,852 km²",loc:"A narrow strip on India's southwestern tip, sandwiched between the Western Ghats mountains to the east and the Arabian Sea to the west. Called 'God's Own Country'.",attr:["Alleppey Backwaters — houseboat cruises on beautiful lagoons","Munnar — tea plantations and mist-covered hills","Periyar National Park — tigers and elephants","Kovalam and Varkala beaches","Thrissur Pooram — grandest temple festival in India"],contrib:["Highest literacy rate in India at 96.2%","Best Human Development Index among all Indian states","World's most important Ayurveda traditional medicine centre","Major producer and exporter of spices"],culture:"Famous for Kerala Sadya grand vegetarian feast on banana leaf, Appam with Stew, and Karimeen fish fry. Known for Kathakali and Mohiniyattam classical dance.",fact:"Kerala's Kalaripayattu martial art, over 3,000 years old, is considered the mother of all martial arts!"},
+{id:"MP",name:"Madhya Pradesh",code:"MP",type:"State",capital:"Bhopal",region:"Central India",lang:"Hindi",area:"3,08,252 km²",loc:"Located at the geographical centre of India — 'Madhya Pradesh' literally means 'Central Province.' India's second largest state by area, bordered by six states.",attr:["Khajuraho Temples — UNESCO World Heritage, 10th century medieval sculptures","Kanha and Bandhavgarh National Parks — among India's best tiger reserves","Sanchi Stupa — UNESCO World Heritage, India's oldest stone structure","Pachmarhi — Queen of Satpura hill station","Ujjain — one of 7 sacred Hindu cities, Kumbh Mela host"],contrib:["India's Tiger State with the highest number of tigers at over 785","Major diamond producer — India's only diamond mines are at Panna","Large soybean, wheat, and pulses producer","Rich in minerals including coal, iron ore, and manganese"],culture:"Famous for Dal Bafla, Poha-Jalebi popular breakfast, and Bhutte ka Kees corn snack. Known for Gond tribal art recognised by UNESCO.",fact:"Madhya Pradesh is India's Tiger State. Kanha National Park was the inspiration behind Rudyard Kipling's famous novel 'The Jungle Book'."},
+{id:"MH",name:"Maharashtra",code:"MH",type:"State",capital:"Mumbai",region:"West India",lang:"Marathi",area:"3,07,713 km²",loc:"Located on western and central India's Deccan Plateau. Bordered by Gujarat, Madhya Pradesh, Chhattisgarh, Telangana, Karnataka, Goa, and the Arabian Sea.",attr:["Mumbai — financial capital, Bollywood city, Gateway of India","Ajanta and Ellora Caves — UNESCO World Heritage","Chhatrapati Shivaji Maharaj's Forts including Raigad and Sinhagad","Shirdi — Sai Baba Temple","Pune — Oxford of the East"],contrib:["Contributes approximately 15% of India's total GDP — the highest of any state","Mumbai is India's financial capital","Bollywood, the world's most prolific film industry, is based in Mumbai","India's first railway line ran from Mumbai to Thane in 1853"],culture:"Famous for Vada Pav, Puran Poli, Modak Lord Ganesha's favourite sweet, and Bhakri. Known for Lavani and Tamasha folk performances.",fact:"India's first railway line ran from Mumbai to Thane on 16 April 1853!"},
+{id:"MN",name:"Manipur",code:"MN",type:"State",capital:"Imphal",region:"Northeast India",lang:"Meitei (Manipuri), English",area:"22,327 km²",loc:"A landlocked state in northeast India. The Imphal Valley in the centre is one of the most fertile plains in the entire northeast. Bordered by Nagaland, Mizoram, Assam, and Myanmar.",attr:["Loktak Lake — largest freshwater lake in northeast India with floating phumdis","Keibul Lamjao National Park — world's only floating national park","Ima Keithel — world's largest all-women market in Imphal","Kangla Fort — ancient royal seat","Shirui Lily Festival in the Shirui Hills"],contrib:["Important gateway to Southeast Asia under India's Act East Policy","Manipuri classical dance is one of India's 8 official classical dance forms","The sport of polo is believed to have originated in Manipur","Birthplace of Indian women's boxing"],culture:"Famous for Eromba fermented fish with vegetables, Singju fresh herb salad, and Chamthong vegetable stew. Known for Manipuri Ras Leela dance.",fact:"Six-time world boxing champion Mary Kom is from Manipur! And Manipur is believed to be the birthplace of polo."},
+{id:"ML",name:"Meghalaya",code:"ML",type:"State",capital:"Shillong",region:"Northeast India",lang:"Khasi, Garo, English",area:"22,429 km²",loc:"Located in northeast India, bordered by Assam and Bangladesh. The name means 'Abode of Clouds'. Home to Mawsynram — the wettest place on Earth.",attr:["Mawsynram and Cherrapunji — wettest places on Earth","Living Root Bridges — unique bridges made from living banyan tree roots","Dawki River — crystal-clear emerald-coloured water","Nohkalikai Falls — one of India's tallest waterfalls","Shillong — Scotland of the East"],contrib:["Mawsynram receives the highest average annual rainfall in the world","Rich coal and limestone reserves","Growing eco-tourism destination in northeast India","One of the few matrilineal societies in the world"],culture:"Famous for Jadoh rice cooked with pork and blood, and Tungrymbai fermented soybean. Known for Nongkrem dance festival.",fact:"Meghalaya has the world's wettest place, Mawsynram. And uniquely, children take their mother's surname — one of the world's few active matrilineal cultures!"},
+{id:"MZ",name:"Mizoram",code:"MZ",type:"State",capital:"Aizawl",region:"Northeast India",lang:"Mizo, English",area:"21,081 km²",loc:"A hilly state in the far south of northeast India, almost entirely forested at 91%. Bordered by Assam, Manipur, Myanmar, and Bangladesh. 'Mizoram' means 'Land of the Hill People'.",attr:["Phawngpui Blue Mountain — highest peak in Mizoram","Champhai — beautiful valley near the Myanmar border","Vantawng Falls — Mizoram's tallest waterfall","Reiek Heritage Village","Dampa Tiger Reserve"],contrib:["Second highest literacy rate in India after Kerala at 91.6%","Bamboo-rich state used in construction, furniture, food, and handicrafts","Unique community welfare system called Tlawmngaihna","Rich biodiversity and growing ecotourism potential"],culture:"Famous for Bai boiled vegetables with pork fat, and Zu rice wine. Known for Cheraw bamboo dance, colourful traditional handloom weaving.",fact:"Despite being a remote hilly state, Mizoram has the second highest literacy rate in India at over 91%."},
+{id:"NL",name:"Nagaland",code:"NL",type:"State",capital:"Kohima",region:"Northeast India",lang:"English, Nagamese, Ao",area:"16,579 km²",loc:"Located in the extreme northeast of India, a mountainous forested state. Bordered by Arunachal Pradesh, Assam, Manipur, and Myanmar. Home to 16 major Naga tribes.",attr:["Hornbill Festival — Festival of Festivals, held every December","Kohima War Cemetery — moving Second World War memorial","Dzukou Valley — stunning valley of seasonal flowers","Nagaland State Museum — rich tribal heritage","Khonoma — India's first declared green village"],contrib:["Preserves the rich cultural heritage of 16 unique Naga warrior tribes","The Battle of Kohima in 1944 was a decisive Second World War turning point","Khonoma is India's first green village pioneering conservation","Growing hub for organic farming and eco-tourism"],culture:"Famous for Smoked Pork with Bamboo Shoot. Known for the spectacular Hornbill Festival and colourful warrior attire.",fact:"The Battle of Kohima in 1944 is called the 'Stalingrad of the East.' British-Indian forces stopped the Japanese advance here!"},
+{id:"OD",name:"Odisha",code:"OD",type:"State",capital:"Bhubaneswar",region:"East India",lang:"Odia",area:"1,55,707 km²",loc:"Located on India's eastern coast along the Bay of Bengal. Bordered by West Bengal, Jharkhand, Chhattisgarh, Andhra Pradesh, and the Bay of Bengal.",attr:["Konark Sun Temple — UNESCO World Heritage, the Black Pagoda from the 13th century","Puri Jagannath Temple — one of the four Char Dham pilgrimage sites","Chilika Lake — Asia's largest coastal lagoon","Bhubaneswar — City of Temples","Rath Yatra — world's largest and oldest chariot festival"],contrib:["Rich mineral state with iron ore, coal, bauxite, and chromite","Puri's Rath Yatra draws millions of devotees","Major steel production hub with the Rourkela Steel Plant","Odissi is one of India's 8 classical dance forms"],culture:"Famous for Dalma lentil, Pakhala Bhata, and Chhena Poda baked cottage cheese sweet. Known for Odissi classical dance.",fact:"The English word 'Juggernaut' meaning an unstoppable overwhelming force comes from 'Jagannath' — the massive wooden chariot of Puri's Rath Yatra."},
+{id:"PB",name:"Punjab",code:"PB",type:"State",capital:"Chandigarh",region:"North India",lang:"Punjabi",area:"50,362 km²",loc:"Located in northwestern India. Bordered by Pakistan, Jammu and Kashmir, Himachal Pradesh, Haryana, and Rajasthan. The name means 'Land of Five Rivers'.",attr:["Golden Temple Harmandir Sahib in Amritsar — holiest shrine of Sikhism","Wagah Border Ceremony — daily flag-lowering parade","Jallianwala Bagh, Amritsar — historic site","Anandpur Sahib — birthplace of the Khalsa"],contrib:["Called the 'Granary of India'","The Green Revolution of the 1960s started in Punjab","Ludhiana is India's leading hub for hosiery, bicycles, and machine tools"],culture:"Famous for Makki di Roti with Sarson da Saag, Butter Chicken, Lassi, and Chole Bhature. Known for Bhangra and Giddha folk dances.",fact:"The Golden Temple in Amritsar serves free community meals to over 1,00,000 people every single day — making it one of the world's largest free kitchens!"},
+{id:"RJ",name:"Rajasthan",code:"RJ",type:"State",capital:"Jaipur",region:"North India",lang:"Hindi, Rajasthani",area:"3,42,239 km²",loc:"India's largest state by area. Located in northwestern India, bordered by Pakistan, Gujarat, Madhya Pradesh, Uttar Pradesh, Haryana, and Punjab. The Thar Desert covers the west.",attr:["Jaipur — the Pink City, a UNESCO World Heritage planned city","Jodhpur — the Blue City","Jaisalmer — the Golden City","Udaipur — the City of Lakes","Ranthambore National Park","Pushkar Camel Fair"],contrib:["India's largest state by area — bigger than France","Largest producer of minerals in India including zinc, lead, and silver","Rajasthan contributes the most to India's tourism revenue"],culture:"Famous for Dal Baati Churma, Ghevar sweet, and Laal Maas fiery mutton curry. Known for Ghoomar dance.",fact:"Jaipur was the world's first fully planned city — built in just 4 years by Maharaja Sawai Jai Singh the Second in 1727."},
+{id:"SK",name:"Sikkim",code:"SK",type:"State",capital:"Gangtok",region:"Northeast India",lang:"Nepali, Sikkimese, Lepcha",area:"7,096 km²",loc:"India's smallest state by area, nestled in the northeastern Himalayas. Bordered by Nepal, Tibet, Bhutan, and West Bengal. The world's third-highest peak, Kangchenjunga, is here.",attr:["Kangchenjunga — world's third highest peak","Rumtek Monastery","Gurudongmar Lake — one of the world's highest lakes","Tsomgo Changu Lake","Nathu La Pass — ancient Silk Route trade pass"],contrib:["India's first fully organic state since 2016","Major cardamom producer","Nathu La Pass is an important trade corridor between India and China"],culture:"Famous for Momos, Thukpa noodle soup, and Phagshapa. Known for Buddhist Cham mask dances.",fact:"Sikkim became India's first fully organic state in 2016 — the entire state uses no chemical fertilisers or pesticides!"},
+{id:"TN",name:"Tamil Nadu",code:"TN",type:"State",capital:"Chennai",region:"South India",lang:"Tamil",area:"1,30,058 km²",loc:"Located at the southernmost tip of peninsular India. Bordered by Kerala, Karnataka, Andhra Pradesh. India's southernmost point, Kanyakumari, is here.",attr:["Meenakshi Amman Temple in Madurai","Brihadeeswarar Temple in Thanjavur","Ooty and Kodaikanal — hill stations","Marina Beach in Chennai","Mahabalipuram — UNESCO World Heritage"],contrib:["One of India's top automobile manufacturing hubs — called the Detroit of India","Leads India in film production after Mumbai","Bharatanatyam, India's most widely practised classical dance, originated here"],culture:"Famous for Idli-Sambar, Dosa, and Filter Coffee. Known for Bharatanatyam dance and Carnatic music.",fact:"Tamil is one of the world's oldest living classical languages with literature dating back over 2,000 years."},
+{id:"TS",name:"Telangana",code:"TS",type:"State",capital:"Hyderabad",region:"South India",lang:"Telugu, Urdu",area:"1,12,077 km²",loc:"India's newest state, formed on 2 June 2014 from Andhra Pradesh. Located in south-central India. Bordered by Maharashtra, Chhattisgarh, Odisha, Andhra Pradesh, and Karnataka.",attr:["Charminar in Hyderabad","Golconda Fort","Ramoji Film City — Guinness-certified world's largest film studio","Warangal Fort","Hussain Sagar Lake"],contrib:["Hyderabad is a global IT and pharmaceutical hub called Cyberabad","India's top bulk drug manufacturing state","Golconda was historically the source of the world's most famous diamonds"],culture:"Famous for Hyderabadi Dum Biryani, and Haleem. Known for Perini Sivatandavam ancient warrior dance.",fact:"The world-famous Kohinoor diamond — now part of the British Crown Jewels — was originally mined at Golconda, Telangana!"},
+{id:"TR",name:"Tripura",code:"TR",type:"State",capital:"Agartala",region:"Northeast India",lang:"Bengali, Kokborok",area:"10,486 km²",loc:"A small state in northeast India, almost entirely surrounded by Bangladesh on three sides. Bordered by Assam and Mizoram to the east.",attr:["Ujjayanta Palace in Agartala","Neermahal — India's largest water palace","Unakoti — extraordinary rock-cut sculptures","Tripura Sundari Temple","Jampui Hills"],contrib:["Natural gas reserves — an important energy source for northeast India","Second largest natural rubber producer in India","Cultural and geographical bridge between India and Bangladesh"],culture:"Famous for Mui Borok traditional Tripuri cuisine. Known for Hojagiri dance.",fact:"Tripura is almost completely surrounded by Bangladesh — it has only a 56 kilometre border with the rest of India!"},
+{id:"UP",name:"Uttar Pradesh",code:"UP",type:"State",capital:"Lucknow",region:"North India",lang:"Hindi, Urdu",area:"2,40,928 km²",loc:"Located in the northern Indo-Gangetic plains. The most populous state in India.",attr:["Taj Mahal in Agra — 7th Wonder of the World","Varanasi — world's oldest continuously inhabited city","Ayodhya","Mathura and Vrindavan","Prayagraj — host of the Kumbh Mela"],contrib:["Most populous state in India","India's largest producer of sugarcane, wheat, and food grains","Houses the most UNESCO World Heritage Sites in India"],culture:"Famous for Lucknowi Awadhi Dum Biryani, Galouti Kebabs. Known for Kathak classical dance, and Banarasi silk sarees.",fact:"Uttar Pradesh is so large that if it were a separate country, it would be the 5th most populous nation on Earth!"},
+{id:"UK",name:"Uttarakhand",code:"UK",type:"State",capital:"Dehradun",region:"North India",lang:"Hindi, Garhwali, Kumaoni",area:"53,483 km²",loc:"Located in the northern Himalayas, carved out of Uttar Pradesh in 2000. Bordered by China, Nepal. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Char Dham — Badrinath, Kedarnath, Gangotri, Yamunotri","Haridwar","Rishikesh — Yoga Capital of the World","Jim Corbett National Park","Valley of Flowers — UNESCO World Heritage"],contrib:["Source of the Ganga and Yamuna rivers","Jim Corbett National Park was India's first national park","Haridwar and Rishikesh are world-leading centres of yoga"],culture:"Famous for Aloo Ke Gutke, Kafuli. Known for Garhwali and Kumaoni folk music.",fact:"Rishikesh is the Yoga Capital of the World. The Beatles visited here in 1968 and composed many songs for the White Album!"},
+{id:"WB",name:"West Bengal",code:"WB",type:"State",capital:"Kolkata",region:"East India",lang:"Bengali, Hindi",area:"88,752 km²",loc:"Located in eastern India along the Bay of Bengal coast. The Sundarbans mangrove delta is in the south.",attr:["Sundarbans — UNESCO World Heritage","Victoria Memorial in Kolkata","Darjeeling — famous hill station and Toy Train","Howrah Bridge","Bishnupur"],contrib:["Kolkata served as the capital of British India for over 100 years","Major jute producer","Darjeeling tea is among the world's most expensive"],culture:"Famous for Rosogolla with GI tag, Mishti Doi, Machh-Bhaat. Known for Durga Puja and Rabindra Sangeet.",fact:"Rabindranath Tagore, born in Kolkata, is the only person in history to have written the national anthems of two different countries — India and Bangladesh!"},
+// UNION TERRITORIES
+{id:"AN",name:"Andaman and Nicobar Islands",code:"AN",type:"Union Territory",capital:"Port Blair",region:"Bay of Bengal",lang:"Hindi, Bengali, Tamil, Telugu",area:"8,249 km²",loc:"An archipelago of 572 islands in the Bay of Bengal, located far from mainland India.",attr:["Cellular Jail, Port Blair","Radhanagar Beach on Havelock Island","Baratang Island","Ross Island","Neil Island"],contrib:["Strategically critical — India's gateway to the Indo-Pacific","Cellular Jail is a monument to India's freedom fighters","Rich marine biodiversity"],culture:"Famous for fresh seafood including mud crab. Known for ancient tribal heritage.",fact:"The Sentinelese tribe of North Sentinel Island are one of the last truly uncontacted peoples in the world."},
+{id:"CH",name:"Chandigarh",code:"CH",type:"Union Territory",capital:"Chandigarh",region:"North India",lang:"Hindi, Punjabi",area:"114 km²",loc:"A Union Territory that serves as the capital of both Punjab and Haryana simultaneously.",attr:["Rock Garden","Sukhna Lake","Rose Garden","Capitol Complex — UNESCO World Heritage","Sector 17 Plaza"],contrib:["One of India's cleanest, greenest, and best-planned cities","Shared capital of two states — a unique administrative arrangement"],culture:"Famous for Chole Bhature, Amritsari Kulcha. Known for its orderly Sector city layout.",fact:"Chandigarh was designed by the renowned Swiss-French architect Le Corbusier after Partition in 1947."},
+{id:"DN",name:"Dadra, Nagar Haveli and Daman, Diu",code:"DN",type:"Union Territory",capital:"Daman",region:"West India",lang:"Gujarati, Hindi",area:"603 km²",loc:"A merged Union Territory on India's western coast, created in 2020. Comprises non-contiguous enclaves.",attr:["Diu Fort","Naida Caves in Diu","Daman Fort","Silvassa","Vanganga Lake Garden"],contrib:["Formerly Portuguese territories, liberated in 1961","Silvassa is a significant industrial hub","Preserved rare Portuguese colonial architecture"],culture:"Famous for fresh seafood, Bebinca Portuguese layered coconut dessert.",fact:"Along with Goa, Daman and Diu were freed from Portugal in December 1961, 14 years after India's independence!"},
+{id:"DL",name:"Delhi (NCT)",code:"DL",type:"Union Territory",capital:"New Delhi",region:"North India",lang:"Hindi, Punjabi, Urdu",area:"1,484 km²",loc:"India's National Capital Territory. Surrounded by Haryana and Uttar Pradesh. The seat of the Indian government.",attr:["Red Fort","Qutub Minar","India Gate","Lotus Temple","Humayun's Tomb"],contrib:["Capital of India","One of the world's largest cities","India's biggest aviation, railway, and road junction"],culture:"Famous for Butter Chicken, Chole Bhature, and Parathas of Old Delhi's Paranthe Wali Gali.",fact:"Delhi has been the capital of at least 8 major empires and has more UNESCO World Heritage Sites than any other city in India."},
+{id:"JK",name:"Jammu and Kashmir",code:"JK",type:"Union Territory",capital:"Srinagar / Jammu",region:"North India",lang:"Kashmiri, Dogri",area:"42,241 km²",loc:"A Union Territory since October 2019. Located in extreme northern India, bordering Pakistan.",attr:["Dal Lake in Srinagar","Gulmarg","Pahalgam","Vaishno Devi Temple","Mughal Gardens"],contrib:["Kashmir Valley produces over 90% of India's saffron","Pashmina Cashmere wool — the world's finest wool","Kashmiri handmade carpets"],culture:"Famous for Wazwan a 30-course Kashmiri feast, and Kashmiri Kahwa tea. Known for Pashmina weaving.",fact:"Kashmir's Pampore district produces over 90% of India's saffron, making it the world's most expensive spice."},
+{id:"LA",name:"Ladakh",code:"LA",type:"Union Territory",capital:"Leh",region:"North India",lang:"Ladakhi, Hindi",area:"59,146 km²",loc:"India's largest Union Territory by area and one of the world's highest inhabited regions. Bordered by China, Pakistan.",attr:["Pangong Tso Lake","Nubra Valley","Thiksey Monastery","Magnetic Hill in Leh","Khardung La"],contrib:["Strategically critical — borders both China and Pakistan","Unique Tibetan Buddhist culture preserved here"],culture:"Famous for Thukpa noodle soup, Tsampa roasted barley flour, and Butter Tea.",fact:"Ladakh's Siachen Glacier is the world's highest battlefield, where Indian soldiers serve above 6,000 metres!"},
+{id:"LD",name:"Lakshadweep",code:"LD",type:"Union Territory",capital:"Kavaratti",region:"Arabian Sea",lang:"Malayalam",area:"32 km²",loc:"India's smallest Union Territory, consisting of 36 tiny coral islands in the Arabian Sea.",attr:["Agatti Island","Bangaram Atoll","Kadmat Island","Minicoy Island","Pristine coral reefs"],contrib:["Pristine coral reef ecosystem critical for biodiversity","Tuna fishing is the main livelihood"],culture:"Famous for seafood including tuna fish curry. Known for Lava dance.",fact:"Lakshadweep is India's smallest UT — smaller than many towns — but gives India an enormous strategic Exclusive Economic Zone in the sea."},
+{id:"PY",name:"Puducherry",code:"PY",type:"Union Territory",capital:"Puducherry",region:"South India",lang:"Tamil, French",area:"479 km²",loc:"A small Union Territory of four non-contiguous districts. Was the capital of French India until 1954.",attr:["French Quarter White Town","Auroville — experimental township dedicated to human unity","Sri Aurobindo Ashram","Promenade Beach"],contrib:["Unique French colonial heritage","Auroville is a globally recognized centre for sustainable living"],culture:"Famous for French-Tamil fusion cuisine. Known for the French Quarter's unique whitewashed buildings and vibrant café culture.",fact:"Puducherry was a French colony until 1954. It still has French street names and French as an official language!"}
+];
+
+// ─── GLOBALS ────────────────────────────────────────────────────────────────
+let currentState=null, typedKeys="", keyTimer=null;
+let ttsEnabled=false, ttsUtterance=null, ttsActive=false;
+const byId=id=>document.getElementById(id);
+const stateMap=Object.fromEntries(STATES.map(s=>[s.id,s]));
+const stateIds=STATES.map(s=>s.id);
+
+// Robust map for handling different names in GeoJSON files
+const normMap = {
+    "andhrapradesh": "AP", "arunachalpradesh": "AR", "assam": "AS", "bihar": "BR",
+    "chhattisgarh": "CG", "goa": "GA", "gujarat": "GJ", "haryana": "HR", 
+    "himachalpradesh": "HP", "jharkhand": "JH", "karnataka": "KA", "kerala": "KL", 
+    "madhyapradesh": "MP", "maharashtra": "MH", "manipur": "MN", "meghalaya": "ML", 
+    "mizoram": "MZ", "nagaland": "NL", "odisha": "OD", "orissa": "OD", 
+    "punjab": "PB", "rajasthan": "RJ", "sikkim": "SK", "tamilnadu": "TN", 
+    "telangana": "TS", "tripura": "TR", "uttarpradesh": "UP", "uttarakhand": "UK", 
+    "westbengal": "WB", "andamanandnicobar": "AN", "andamanandnicobarisland": "AN", 
+    "chandigarh": "CH", "dadraandnagarhaveli": "DN", "damananddiu": "DN", 
+    "delhi": "DL", "nctofdelhi": "DL", "jammuandkashmir": "JK", "ladakh": "LA", 
+    "lakshadweep": "LD", "puducherry": "PY", "pondicherry": "PY"
+};
+
+// ─── D3.JS MAP RENDERER ──────────────────────────────────────────────────────
+async function initHighFidelityMap() {
+    try {
+        // Fetch an open-source, highly accurate India geojson using D3
+        const geoURL = "https://raw.githubusercontent.com/geohacker/india/master/state/india_telengana.geojson";
+        const response = await fetch(geoURL);
+        const geoData = await response.json();
+
+        const svg = d3.select("#map-svg");
+        const mapGroup = d3.select("#map-g");
+        
+        // Dynamically scale mapping to our viewBox (1000x1000)
+        const projection = d3.geoMercator().fitSize([900, 950], geoData);
+        // Tweak mapping slightly towards center
+        projection.translate([projection.translate()[0] + 50, projection.translate()[1] + 15]);
+        const pathGen = d3.geoPath().projection(projection);
+
+        geoData.features.forEach(feat => {
+            const rawName = feat.properties.NAME_1 || feat.properties.st_nm || feat.properties.name || "";
+            const norm = rawName.toLowerCase().replace(/[^a-z]/g, '');
+            let stId = normMap[norm];
+
+            // Older GeoJSONs package Ladakh inside JK; handle gracefully if needed.
+            if(norm === "jammuandkashmir") stId = "JK"; 
+
+            if (stId && stateMap[stId]) {
+                const sData = stateMap[stId];
+
+                // Append detailed state border paths
+                mapGroup.append("path")
+                    .attr("d", pathGen(feat))
+                    .attr("class", "st" + (sData.type === "Union Territory" ? " ut-shape" : ""))
+                    .attr("data-region", sData.region)
+                    .attr("id", "p-" + stId)
+                    .attr("onclick", `activate('${stId}')`)
+                    .attr("role", "button")
+                    .attr("tabindex", "0")
+                    .attr("aria-label", sData.name)
+                    .append("title").text(sData.name);
+
+                // Calculate centroid for smart label placement
+                const centroid = pathGen.centroid(feat);
+                if (!isNaN(centroid[0]) && !isNaN(centroid[1])) {
+                    let cx = centroid[0];
+                    let cy = centroid[1];
+                    // Manual label tweaks for visual clarity on crowded clusters
+                    if (stId === "KL") cx -= 15;
+                    if (stId === "TR") cy += 10;
+                    if (stId === "ML") cy += 5;
+                    if (stId === "HP") cx -= 10;
+                    if (stId === "HR") cy += 5;
+
+                    mapGroup.append("text")
+                        .attr("x", cx)
+                        .attr("y", cy)
+                        .attr("class", "sl")
+                        .attr("id", "l-" + stId)
+                        .text(sData.code);
+                }
+            }
+        });
+
+        // Hide loading screen upon render completion
+        byId("loading-indicator").style.display = "none";
+
+    } catch (error) {
+        console.error("Map rendering failed:", error);
+        byId("loading-indicator").innerHTML = "⚠️ Could not connect to geographical data provider.<br>Please check your internet connection.";
+    }
+}
+
+
+// ─── TTS ─────────────────────────────────────────────────────────────────────
+function getTTSText(s){
+  const attrStr=s.attr.map((a,i)=>`${i+1}. ${a}`).join('. ');
+  const contribStr=s.contrib.join('. ');
+  return `${s.name}. Capital: ${s.capital}. Language: ${s.lang}. Area: ${s.area}. Region: ${s.region}. Location: ${s.loc}. Major attractions include: ${attrStr}. Key contributions: ${contribStr}. Food and culture: ${s.culture}. Did you know? ${s.fact}`;
+}
+
+function speakText(text, label){
+  if(!('speechSynthesis' in window))return;
+  stopTTS();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.92; u.pitch=1.0; u.volume=1.0;
+  u.lang='en-IN';
+  ttsUtterance=u;
+  ttsActive=true;
+  byId('tts-bar').classList.add('visible');
+  byId('tts-reading-text').textContent='Reading: '+label;
+  byId('tts-read-btn').classList.add('reading');
+  byId('tts-read-btn').textContent='⏹ Stop';
+  u.onend=u.onerror=()=>{
+    ttsActive=false;
+    byId('tts-bar').classList.remove('visible');
+    byId('tts-read-btn').classList.remove('reading');
+    byId('tts-read-btn').textContent='🔊 Read Aloud';
+  };
+  speechSynthesis.speak(u);
+}
+
+function stopTTS(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  ttsActive=false;
+  byId('tts-bar').classList.remove('visible');
+  if(byId('tts-read-btn')){byId('tts-read-btn').classList.remove('reading');byId('tts-read-btn').textContent='🔊 Read Aloud';}
+}
+
+function toggleTTS(){
+  ttsEnabled=!ttsEnabled;
+  byId('tts-label').textContent=ttsEnabled?'TTS: ON':'TTS: OFF';
+  byId('tts-toggle').classList.toggle('speaking',ttsEnabled);
+  if(!ttsEnabled) stopTTS();
+}
+
+function readStateAloud(){
+  if(!currentState)return;
+  const s=stateMap[currentState];
+  if(ttsActive){stopTTS();return;}
+  speakText(getTTSText(s),s.name);
+}
+
+// ─── PANEL ───────────────────────────────────────────────────────────────────
+function buildPanel(){
+  const states=STATES.filter(s=>s.type==="State").sort((a,b)=>a.name.localeCompare(b.name));
+  const uts=STATES.filter(s=>s.type==="Union Territory").sort((a,b)=>a.name.localeCompare(b.name));
+  let h=`<div class="psect">States (28)</div>`;
+  states.forEach(s=>{
+    h+=`<div class="sci" id="si-${s.id}" role="button" tabindex="0" onclick="activate('${s.id}')" onkeydown="if(event.key==='Enter')activate('${s.id}')">
+      <span class="sck">${s.code}</span><span class="scn">${s.name}</span>
+    </div>`;
+  });
+  h+=`<div class="psect" style="margin-top:.3rem">Union Territories (8)</div>`;
+  uts.forEach(s=>{
+    h+=`<div class="sci" id="si-${s.id}" role="button" tabindex="0" onclick="activate('${s.id}')" onkeydown="if(event.key==='Enter')activate('${s.id}')">
+      <span class="sck">${s.code}</span><span class="scn">${s.name}</span><span class="scut">UT</span>
+    </div>`;
+  });
+  byId("panel-inner").innerHTML=h;
+}
+
+// ─── MAP HIGHLIGHT ────────────────────────────────────────────────────────────
+window.activate = function(id) { // Attached to window to play nice with dynamically injected D3 SVGs
+  const s=stateMap[id];
+  if(!s)return;
+  if(currentState){
+    byId("p-"+currentState)?.classList.remove("lit");
+    byId("l-"+currentState)?.classList.remove("lit");
+    byId("si-"+currentState)?.classList.remove("active");
+  }
+  STATES.forEach(st=>{
+    byId("p-"+st.id)?.classList.toggle("dim", st.id!==id);
+    byId("l-"+st.id)?.classList.toggle("dim", st.id!==id);
+  });
+  
+  // Apply Lit States robustly
+  const targetPath = d3.select("#p-" + id).node();
+  if (targetPath) {
+     targetPath.classList.add("lit");
+     targetPath.classList.remove("dim");
+     // Bring the active state path to the very front using D3 to prevent strokes from hiding
+     d3.select(targetPath).raise();
+  }
+  
+  byId("l-"+id)?.classList.add("lit");
+  byId("l-"+id)?.classList.remove("dim");
+  byId("si-"+id)?.classList.add("active");
+  byId("si-"+id)?.scrollIntoView({block:"nearest",behavior:"smooth"});
+  currentState=id;
+  byId("status").innerHTML=`<b>${s.name}</b> selected — press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for full details`;
+  
+  if(ttsEnabled){
+    stopTTS();
+    speakText(`${s.name}. ${s.type}. Capital: ${s.capital}. Located in ${s.region}. ${s.loc}`,s.name);
+  } else {
+    announce(`${s.name} highlighted. Press Enter for details.`);
+  }
+};
+
+function clearAll(){
+  if(currentState){
+    byId("p-"+currentState)?.classList.remove("lit");
+    byId("l-"+currentState)?.classList.remove("lit");
+    byId("si-"+currentState)?.classList.remove("active");
+  }
+  STATES.forEach(st=>{
+    byId("p-"+st.id)?.classList.remove("dim");
+    byId("l-"+st.id)?.classList.remove("dim");
+  });
+  currentState=null; typedKeys=""; updateKD("");
+  byId("status").innerHTML='Click any state or type a shortcut — e.g. <b>KL</b> Kerala &nbsp;·&nbsp; <b>UP</b> Uttar Pradesh &nbsp;·&nbsp; <b>MH</b> Maharashtra';
+  stopTTS();
+  announce("Selection cleared.");
+}
+
+// ─── POPUP ────────────────────────────────────────────────────────────────────
+function showPopup(id){
+  const s=stateMap[id];
+  if(!s)return;
+  byId("pop-name").textContent=s.name;
+  byId("pop-code").textContent=`Shortcut: ${s.code}`;
+  byId("pop-badge-type").textContent=s.type;
+  byId("pop-badge-type").className='phbadge'+(s.type==="Union Territory"?" ut":"");
+  byId("pop-badge-region").textContent=s.region;
+  byId("pop-capital").textContent=s.capital;
+  byId("pop-lang").textContent=s.lang;
+  byId("pop-area").textContent=s.area;
+  byId("pop-region").textContent=s.region;
+  byId("pop-loc").textContent=s.loc;
+  byId("pop-attr").innerHTML=`<ul>${s.attr.map(a=>`<li>${a}</li>`).join("")}</ul>`;
+  byId("pop-contrib").innerHTML=`<ul>${s.contrib.map(c=>`<li>${c}</li>`).join("")}</ul>`;
+  byId("pop-culture").textContent=s.culture;
+  byId("pop-fact").textContent=s.fact;
+  byId("popup").classList.add("show");
+  byId("overlay").classList.add("show");
+  byId("pop-close").focus();
+  if(ttsEnabled){
+    setTimeout(()=>speakText(getTTSText(s),s.name),400);
+  }
+}
+
+function hidePopup(){
+  byId("popup").classList.remove("show");
+  byId("overlay").classList.remove("show");
+  stopTTS();
+}
+
+function navState(dir){
+  const i=stateIds.indexOf(currentState);
+  if(i===-1)return;
+  const ni=(i+dir+stateIds.length)%stateIds.length;
+  activate(stateIds[ni]);
+  showPopup(stateIds[ni]);
+}
+
+function announce(t){
+  const el=byId("live");
+  el.textContent="";
+  setTimeout(()=>el.textContent=t,60);
+}
+
+function updateKD(t){
+  const el=byId("key-ind");
+  el.textContent=t;
+  el.classList.toggle("show",t.length>0);
+}
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+document.addEventListener("keydown",e=>{
+  if(byId("popup").classList.contains("show")){
+    if(e.key==="Escape"){hidePopup();return;}
+    if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();navState(1);return;}
+    if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();navState(-1);return;}
+    if(e.key===" "){e.preventDefault();readStateAloud();return;}
+    return;
+  }
+  if(e.key==="Escape"){clearAll();return;}
+  if((e.key==="Enter"||e.key===" ")&&currentState){showPopup(currentState);e.preventDefault();return;}
+  if(e.ctrlKey||e.altKey||e.metaKey)return;
+  if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
+    typedKeys+=e.key.toUpperCase();
+    updateKD(typedKeys);
+    clearTimeout(keyTimer);
+    keyTimer=setTimeout(()=>{typedKeys="";updateKD("");},2200);
+    const m=STATES.find(s=>s.code===typedKeys);
+    if(m){activate(m.id);typedKeys="";updateKD(m.code);clearTimeout(keyTimer);}
+    else if(typedKeys.length>=3){typedKeys="";updateKD("");}
+  }
+});
+
+// ─── PANEL TOGGLE ────────────────────────────────────────────────────────────
+const tog=byId("panel-toggle");
+tog.addEventListener("click",()=>{
+  const inner=byId("panel-inner");
+  const c=inner.classList.toggle("hidden");
+  tog.classList.toggle("collapsed",c);
+  tog.setAttribute("aria-expanded",!c);
+});
+tog.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tog.click();}});
+
+byId("pop-close").addEventListener("click",hidePopup);
+byId("overlay").addEventListener("click",hidePopup);
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+buildPanel();
+initHighFidelityMap(); 
+</script>
+</body>
+</html>
