@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>India Political Map — Interactive Teaching Tool</title>
+<title>India Political Map â€” Interactive Teaching Tool</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- D3.js for rendering high-fidelity map shapes -->
@@ -43,7 +43,7 @@ body{
   overflow:hidden;
 }
 
-/* ─── HEADER ─── */
+/* â”€â”€â”€ HEADER â”€â”€â”€ */
 #header{
   background:linear-gradient(135deg,#1a0a04 0%,#2d1208 50%,#1a0a04 100%);
   border-bottom:3px solid var(--gold);
@@ -118,10 +118,10 @@ body{
   font-size:.58rem;
 }
 
-/* ─── LAYOUT ─── */
+/* â”€â”€â”€ LAYOUT â”€â”€â”€ */
 #layout{display:flex;flex:1;overflow:hidden;}
 
-/* ─── SIDEBAR ─── */
+/* â”€â”€â”€ SIDEBAR â”€â”€â”€ */
 #side{
   width:220px;
   min-width:200px;
@@ -205,7 +205,7 @@ body{
   flex-shrink:0;
 }
 
-/* ─── MAP AREA ─── */
+/* â”€â”€â”€ MAP AREA â”€â”€â”€ */
 #map-area{
   flex:1;
   display:flex;
@@ -260,7 +260,7 @@ body{
   pointer-events: none;
 }
 
-/* ─── STATE PATHS (D3 Rendered) ─── */
+/* â”€â”€â”€ STATE PATHS (D3 Rendered) â”€â”€â”€ */
 .st{
   fill:#3a6b3a;
   stroke:#1a3a1a;
@@ -312,7 +312,7 @@ body{
 .sl.lit{fill:#fff700;font-size:18px;}
 .sl.dim{fill:#3a5a3a;opacity:.4;}
 
-/* ─── SEA LABELS ─── */
+/* â”€â”€â”€ SEA LABELS â”€â”€â”€ */
 .sea-label{
   font-family:'Cinzel',serif;
   font-size: 22px;
@@ -322,10 +322,10 @@ body{
   font-style:italic;
   letter-spacing:.08em;
 }
-/* ─── COMPASS ROSE ─── */
+/* â”€â”€â”€ COMPASS ROSE â”€â”€â”€ */
 .compass{pointer-events:none;}
 
-/* ─── STATUS BAR ─── */
+/* â”€â”€â”€ STATUS BAR â”€â”€â”€ */
 #status{
   position:absolute;
   top:.65rem;
@@ -364,7 +364,7 @@ body{
 }
 #key-ind.show{opacity:1;}
 
-/* ─── LEGEND ─── */
+/* â”€â”€â”€ LEGEND â”€â”€â”€ */
 #legend{
   position:absolute;
   bottom:.8rem;
@@ -382,11 +382,11 @@ body{
 .legend-row{display:flex;align-items:center;gap:.4rem;margin:.18rem 0;}
 .legend-swatch{width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,.1);}
 
-/* ─── OVERLAY ─── */
+/* â”€â”€â”€ OVERLAY â”€â”€â”€ */
 #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:90;backdrop-filter:blur(3px);}
 #overlay.show{display:block;}
 
-/* ─── POPUP ─── */
+/* â”€â”€â”€ POPUP â”€â”€â”€ */
 #popup{
   display:none;
   position:fixed;
@@ -497,7 +497,7 @@ body{
 .psbody{font-family:'Crimson Pro',serif;font-size:.9rem;line-height:1.7;color:#2a1a08;}
 .psbody ul{list-style:none;padding:0;}
 .psbody ul li{padding:.1rem 0 .1rem 1.1rem;position:relative;}
-.psbody ul li::before{content:"▸";color:var(--gold);position:absolute;left:0;font-size:.65rem;top:.2rem;}
+.psbody ul li::before{content:"â–¸";color:var(--gold);position:absolute;left:0;font-size:.65rem;top:.2rem;}
 
 .pfact{
   background:linear-gradient(135deg,rgba(42,128,128,.08),rgba(42,128,128,.04));
@@ -523,7 +523,7 @@ body{
 }
 .pfoot kbd{background:var(--aged);border:1px solid var(--border-warm);border-radius:3px;padding:1px 5px;color:var(--rust);}
 
-/* ─── TTS INDICATOR ─── */
+/* â”€â”€â”€ TTS INDICATOR â”€â”€â”€ */
 #tts-bar{
   position:absolute;
   bottom:3.5rem;
@@ -569,13 +569,13 @@ body{
 
 <header id="header">
   <div>
-    <h1>🇮🇳 INDIA — Political Map</h1>
-    <div class="subtitle">INTERACTIVE TEACHING TOOL &nbsp;·&nbsp; HIGH FIDELITY RENDER</div>
+    <h1>ðŸ‡®ðŸ‡³ INDIA â€” Political Map</h1>
+    <div class="subtitle">INTERACTIVE TEACHING TOOL &nbsp;Â·&nbsp; HIGH FIDELITY RENDER</div>
   </div>
   <div class="header-controls">
     <div class="hint-chip">Type <kbd>KL</kbd> <kbd>UP</kbd> <kbd>MH</kbd> to locate &nbsp;|&nbsp; <kbd>Enter</kbd> details &nbsp;|&nbsp; <kbd>Esc</kbd> clear</div>
     <button class="tts-btn" id="tts-toggle" onclick="toggleTTS()" title="Toggle text-to-speech auto-read">
-      <span id="tts-icon">🔊</span> <span id="tts-label">TTS: OFF</span>
+      <span id="tts-icon">ðŸ”Š</span> <span id="tts-label">TTS: OFF</span>
     </button>
   </div>
 </header>
@@ -584,13 +584,13 @@ body{
   <nav id="side" aria-label="State shortcuts">
     <div id="panel-toggle" role="button" aria-expanded="true" aria-controls="panel-inner" tabindex="0">
       <span class="pt">Shortcut Reference</span>
-      <span class="arrow">▼</span>
+      <span class="arrow">â–¼</span>
     </div>
     <div id="panel-inner"></div>
   </nav>
 
   <main id="map-area" tabindex="0" aria-label="India political map">
-    <div id="status" role="status" aria-live="polite">Click any state or type a shortcut — e.g. <b>KL</b> Kerala &nbsp;·&nbsp; <b>UP</b> Uttar Pradesh</div>
+    <div id="status" role="status" aria-live="polite">Click any state or type a shortcut â€” e.g. <b>KL</b> Kerala &nbsp;Â·&nbsp; <b>UP</b> Uttar Pradesh</div>
     
     <div id="map-wrap">
       <div id="loading-indicator">
@@ -619,14 +619,15 @@ body{
 
         <!-- D3 Map Path Elements will be injected here -->
         <g id="map-g"></g>
+        <circle id="virtual-cursor" cx="500" cy="500" r="8" fill="rgba(192, 57, 43, 0.9)" stroke="#ffd060" stroke-width="2" style="display: none; filter: drop-shadow(0 0 6px rgba(192,57,43,0.8));" pointer-events="none" />
       </svg>
     </div>
 
     <div id="key-ind" aria-hidden="true"></div>
     <div id="tts-bar">
       <div class="tts-wave"><span></span><span></span><span></span><span></span><span></span></div>
-      <span id="tts-reading-text">Reading…</span>
-      <button onclick="stopTTS()" style="background:rgba(192,57,43,.3);border:1px solid rgba(192,57,43,.5);color:#e07060;border-radius:4px;padding:2px 8px;font-family:JetBrains Mono,monospace;font-size:.55rem;cursor:pointer;margin-left:.5rem;">■ Stop</button>
+      <span id="tts-reading-text">Readingâ€¦</span>
+      <button onclick="stopTTS()" style="background:rgba(192,57,43,.3);border:1px solid rgba(192,57,43,.5);color:#e07060;border-radius:4px;padding:2px 8px;font-family:JetBrains Mono,monospace;font-size:.55rem;cursor:pointer;margin-left:.5rem;">â–  Stop</button>
     </div>
 
     <!-- Legend -->
@@ -662,8 +663,8 @@ body{
         </div>
       </div>
       <div class="ph-right">
-        <button class="phclose" id="pop-close" aria-label="Close">ESC / ✕</button>
-        <button class="tts-read-btn" id="tts-read-btn" onclick="readStateAloud()">🔊 Read Aloud</button>
+        <button class="phclose" id="pop-close" aria-label="Close">ESC / âœ•</button>
+        <button class="tts-read-btn" id="tts-read-btn" onclick="readStateAloud()">ðŸ”Š Read Aloud</button>
       </div>
     </div>
   </div>
@@ -679,80 +680,82 @@ body{
 
     <!-- Sections -->
     <div class="psec">
-      <div class="pstitle"><span class="icon">📍</span> Location &amp; Geography</div>
+      <div class="pstitle"><span class="icon">ðŸ“</span> Location &amp; Geography</div>
       <div class="psbody" id="pop-loc"></div>
     </div>
     <div class="psec">
-      <div class="pstitle"><span class="icon">🏛️</span> Major Attractions</div>
+      <div class="pstitle"><span class="icon">ðŸ›ï¸</span> Major Attractions</div>
       <div class="psbody" id="pop-attr"></div>
     </div>
     <div class="psec">
-      <div class="pstitle"><span class="icon">🌟</span> Key Contributions to India</div>
+      <div class="pstitle"><span class="icon">ðŸŒŸ</span> Key Contributions to India</div>
       <div class="psbody" id="pop-contrib"></div>
     </div>
     <div class="psec">
-      <div class="pstitle"><span class="icon">🍛</span> Food &amp; Culture</div>
+      <div class="pstitle"><span class="icon">ðŸ›</span> Food &amp; Culture</div>
       <div class="psbody" id="pop-culture"></div>
     </div>
     <div class="pfact">
-      <div class="pftitle">⭐ DID YOU KNOW?</div>
+      <div class="pftitle">â­ DID YOU KNOW?</div>
       <div class="pfbody" id="pop-fact"></div>
     </div>
   </div>
 
   <div class="pfoot">
     <span><kbd>Esc</kbd> close</span>
-    <span><kbd>←</kbd><kbd>→</kbd> prev / next state</span>
-    <span><kbd>Tab</kbd> navigate</span>
+    <span><kbd>Arrows</kbd> move cursor</span>
+    <span><kbd>Tab</kbd> focus list</span>
     <span><kbd>Space</kbd> read aloud</span>
   </div>
 </div>
 
 <script>
-// ─── DATA (Kept perfectly intact for logic mapping) ────────────────────────
+// â”€â”€â”€ DATA (Kept perfectly intact for logic mapping) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const STATES=[
-{id:"AP",name:"Andhra Pradesh",code:"AP",type:"State",capital:"Amaravati",region:"South India",lang:"Telugu",area:"1,62,975 km²",loc:"Located on the southeastern coast of India along the Bay of Bengal. Bordered by Telangana and Chhattisgarh to the north, Odisha to the northeast, Karnataka and Tamil Nadu to the west and south.",attr:["Tirumala Venkateswara Temple, Tirupati — world's most visited pilgrimage site","Araku Valley — scenic hill station with tribal culture","Borra Caves — ancient limestone caves","Vijayawada — historical city on the Krishna River","Nagarjunakonda — ancient Buddhist heritage site"],contrib:["Known as the 'Rice Bowl of India' — major rice-producing state","Tirupati temple is the world's richest, receiving over ₹1,000 crore annually","Major IT corridor in Vizag and Amaravati region","Leading producer of tobacco, sugarcane, chillies, and cotton"],culture:"Famous for Pesarattu, Gongura pachadi, and Hyderabadi-style biryani. Known for Kuchipudi classical dance, Kalamkari textile art, and Kondapalli wooden toys.",fact:"The Tirumala Venkateswara Temple in Tirupati receives over 50,000 devotees every single day — more than the Vatican or Mecca — making it the most visited place of worship on Earth!"},
-{id:"AR",name:"Arunachal Pradesh",code:"AR",type:"State",capital:"Itanagar",region:"Northeast India",lang:"English, Nyishi, Adi, Bengali",area:"83,743 km²",loc:"The easternmost state of India — the first place in India to see the sunrise each day. Shares borders with Bhutan, China, and Myanmar. Called 'Land of the Rising Sun'.",attr:["Tawang Monastery — largest monastery in India","Ziro Valley — UNESCO World Heritage nominated","Namdapha National Park — rich biodiversity","Sela Pass — high-altitude mountain pass","Mechuka Valley — remote and breathtaking"],contrib:["Strategically crucial for India's northeastern border","One of the world's 36 biodiversity hotspots","Enormous hydroelectric power potential","Home to 26 major tribes preserving unique ancient cultures"],culture:"Famous for Thukpa, Apong rice beer, and bamboo shoot dishes. Known for colourful tribal festivals like Losar and Ponung dance.",fact:"Arunachal Pradesh is larger than the entire country of Austria! It is home to Kibithoo, the easternmost town in India, where the sun rises first in the country."},
-{id:"AS",name:"Assam",code:"AS",type:"State",capital:"Dispur",region:"Northeast India",lang:"Assamese, Bengali, Bodo",area:"78,438 km²",loc:"Located in the Brahmaputra river valley in northeast India — the gateway to the Seven Sister States. Shares borders with Bhutan, Bangladesh, and six Indian states.",attr:["Kaziranga National Park — UNESCO World Heritage Site","Majuli Island — world's largest river island","Kamakhya Temple — famous Shakti pilgrimage site","Manas National Park — UNESCO World Heritage","Tea Gardens of Jorhat and Dibrugarh"],contrib:["World-famous Assam tea — largest tea-producing region in India","Kaziranga shelters two-thirds of Earth's one-horned rhinoceroses","Digboi has India's oldest operational oil refinery, established in 1889","Muga silk is the world's rarest golden-yellow silk, found nowhere else"],culture:"Famous for Masor Tenga, Pitha rice cakes, and Jolpan. Known for Bihu festival, Sattriya dance recognised by UNESCO, and bamboo craft.",fact:"Assam's Muga silk is a golden-yellow natural silk unique to this state — it gets more lustrous and stronger with every wash! Kaziranga has more rhinos per square kilometre than anywhere else on Earth."},
-{id:"BR",name:"Bihar",code:"BR",type:"State",capital:"Patna",region:"East India",lang:"Hindi, Maithili, Bhojpuri",area:"94,163 km²",loc:"Located in the eastern Indo-Gangetic plains, bordered by Nepal, Uttar Pradesh, Jharkhand, and West Bengal. The sacred Ganga river flows through Bihar.",attr:["Bodh Gaya — where Lord Buddha attained enlightenment, a UNESCO World Heritage Site","Nalanda — ruins of the ancient world's greatest university","Rajgir — historic city of the Magadha kingdom","Vaishali — birthplace of Lord Mahavira, founder of Jainism","Patna Sahib — sacred Sikh Gurudwara"],contrib:["Birthplace of two world religions: Buddhism and Jainism","Nalanda University was one of the world's first residential universities with 10,000 students","The Magadha Empire unified most of ancient India under Chandragupta Maurya and Ashoka","Major vegetable and fruit producer for eastern India"],culture:"Famous for Litti Chokha, Sattu drink, and Thekua festive sweet. Known for Madhubani painting, Chhath Puja festival, and Sonepur Mela — Asia's largest cattle fair.",fact:"Chhath Puja is the only major Hindu festival where worship is offered directly to the rising and setting Sun at a riverbank — with no idol or priest required. It is one of the most ancient sun-worship traditions still practiced today!"},
-{id:"CG",name:"Chhattisgarh",code:"CG",type:"State",capital:"Raipur",region:"Central India",lang:"Hindi, Chhattisgarhi",area:"1,35,192 km²",loc:"A large landlocked state in central India, carved out of Madhya Pradesh in 2000. About 44% of the state is covered by dense forest.",attr:["Chitrakote Falls — India's widest waterfall, the Niagara of India","Kanger Valley National Park","Bastar — famous for unique tribal culture","Sirpur — ancient Buddhist-Hindu heritage town","Barnawapara Wildlife Sanctuary"],contrib:["Called the 'Rice Bowl of Central India'","Contributes about 15% of India's total steel production","Vast mineral wealth including coal, iron ore, limestone, and bauxite","Dense forests produce timber, tendu leaves, and bamboo"],culture:"Famous for Chila rice pancakes, Bafauri steamed lentil dumplings, and Aamat tribal curry. Known for Bastar tribal art, Dhokra metal casting — a 3,000-year-old technique — and Panthi and Karma folk dances.",fact:"Chhattisgarh has one of India's highest tribal populations at over 30%. Its Bastar Dussehra is the world's longest-running festival, celebrated over 75 days — far longer than any other Dussehra in India!"},
-{id:"GA",name:"Goa",code:"GA",type:"State",capital:"Panaji",region:"West India",lang:"Konkani, Marathi, English",area:"3,702 km²",loc:"India's smallest state by area, on the western Konkan coast. Bordered by Maharashtra, Karnataka, and the Arabian Sea. It was a Portuguese colony for 451 years until liberated in 1961.",attr:["Baga, Calangute, Anjuna, and Palolem Beaches","Basilica of Bom Jesus — UNESCO World Heritage","Dudhsagar Waterfalls — one of India's tallest","Old Goa Churches and Convents — UNESCO Heritage","Goa Carnival — vibrant annual festival"],contrib:["Highest per capita income among all Indian states","India's top tourism destination contributing significantly to foreign exchange","Major cashew and spice exporter","Preserved rare Portuguese-Goan architectural and cultural heritage","Important fishing and seafood industry"],culture:"Famous for Fish Curry Rice, Bebinca layered coconut dessert, and Feni liquor. Known for Konkani music, Dekhnni and Fugdi folk dances, and a unique blend of Hindu and Portuguese traditions.",fact:"Goa was under Portuguese colonial rule for 451 years from 1510 to 1961 — longer than the British ruled any other part of India! The Indian Army liberated it in just 2 days in Operation Vijay on 19 December 1961."},
-{id:"GJ",name:"Gujarat",code:"GJ",type:"State",capital:"Gandhinagar",region:"West India",lang:"Gujarati",area:"1,96,024 km²",loc:"Located in western India with India's longest coastline of over 1,600 kilometres. Bordered by Rajasthan, Madhya Pradesh, Maharashtra, Pakistan, and the Arabian Sea.",attr:["Gir National Park — the only habitat of wild Asiatic lions in the world","Rann of Kutch — world's largest salt desert","Statue of Unity — world's tallest statue at 182 metres","Somnath Temple — first of the 12 Jyotirlingas","Dwarkadhish Temple — one of the four Char Dham"],contrib:["India's largest pharmaceutical hub, the Pharmacy of the World","Surat processes over 90% of the world's rough diamonds","Amul cooperative is the world's largest milk cooperative","Major petrochemical and chemical industry centre","Birthplace of Mahatma Gandhi and Sardar Vallabhbhai Patel"],culture:"Famous for Dhokla, Thepla, Fafda-Jalebi, and Khakhra. Known for Garba and Dandiya Raas dance during Navratri, Bandhani tie-dye, Patola silk weaving, and Rogan art from Kutch.",fact:"The Statue of Unity in Gujarat is the world's tallest statue at 182 metres — twice the height of the Statue of Liberty! It is a tribute to Sardar Vallabhbhai Patel who unified 562 princely states into modern India."},
-{id:"HR",name:"Haryana",code:"HR",type:"State",capital:"Chandigarh",region:"North India",lang:"Hindi, Haryanvi",area:"44,212 km²",loc:"Located in northern India, Haryana almost completely surrounds Delhi on three sides. Bordered by Punjab, Himachal Pradesh, Uttarakhand, Uttar Pradesh, and Rajasthan.",attr:["Kurukshetra — site of the great Mahabharata war","Brahma Sarovar — sacred lake at Kurukshetra","Sultanpur Bird Sanctuary","Pinjore Gardens","Surajkund — annual international crafts fair"],contrib:["One of India's leading states in wheat and rice production","Gurugram and Faridabad are major IT, automobile, and manufacturing hubs","Produces the most Olympic medal-winning wrestlers and athletes per capita","Leads India in milk and dairy production per capita"],culture:"Famous for Bajre ki Khichdi, Kadhi pakoda, and Besan masala roti. Known for Phulkari embroidery, Haryanvi folk songs, and a strong wrestling and sports culture.",fact:"Haryana is India's sports powerhouse, producing more Olympic and Commonwealth Games medal winners per capita than almost any other state. Neeraj Chopra from Haryana won India's first athletics gold medal at the Tokyo Olympics 2020!"},
-{id:"HP",name:"Himachal Pradesh",code:"HP",type:"State",capital:"Shimla / Dharamshala",region:"North India",lang:"Hindi, Pahari, Punjabi",area:"55,673 km²",loc:"A mountainous state in the western Himalayas, bordered by Jammu and Kashmir, Punjab, Haryana, Uttarakhand, and China. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Shimla — former summer capital of British India","Manali and Rohtang Pass — adventure tourism","Spiti Valley — remote cold desert landscape","Dharamshala — home of the Dalai Lama in exile","Khajjiar — called India's mini-Switzerland"],contrib:["Major apple producer contributing over 25% of India's total apple output","Significant hydroelectric power generation for northern India","Key centre for Tibetan Buddhism in India","Important hill station tourism hub"],culture:"Famous for Siddu steamed wheat bread, Madra chickpea curry, and Dham grand festival feast. Known for Kinnauri and Kullu shawls, Nati folk dance, and Chamba Rumal embroidery.",fact:"Himachal Pradesh's Nati dance holds a Guinness World Record for being performed simultaneously by over 10,000 dancers at one event!"},
-{id:"JH",name:"Jharkhand",code:"JH",type:"State",capital:"Ranchi",region:"East India",lang:"Hindi, Santali, Bengali",area:"79,716 km²",loc:"Located in eastern India on the Chota Nagpur Plateau, carved out of southern Bihar in 2000. Bordered by Bihar, West Bengal, Odisha, Chhattisgarh, and Uttar Pradesh.",attr:["Hundru Falls — beautiful waterfall near Ranchi","Betla National Park — tigers and elephants","Deoghar — important Jyotirlinga temple","Netarhat — Queen of Chotanagpur hill station","Jonha Gautamdhara Falls"],contrib:["India's mineral capital holding nearly 40% of the country's entire mineral reserves","Major coal, iron ore, copper, uranium, and mica producer","TATA Steel in Jamshedpur — one of Asia's largest integrated steel plants","Chhau dance, a UNESCO Intangible Cultural Heritage, originated here"],culture:"Famous for Thekua, Dhuska fried rice-lentil bread, and Litti Chokha. Known for Sohrai and Khovar tribal wall painting, Chhau mask dance, and Sarhul and Karma tribal festivals.",fact:"Jamshedpur in Jharkhand was built by TATA Steel in 1907 and is India's best-known planned industrial city."},
-{id:"KA",name:"Karnataka",code:"KA",type:"State",capital:"Bengaluru",region:"South India",lang:"Kannada",area:"1,91,791 km²",loc:"Located in the Deccan Plateau of southwestern India. Bordered by Goa, Maharashtra, Telangana, Andhra Pradesh, Tamil Nadu, Kerala, and the Arabian Sea.",attr:["Hampi — UNESCO World Heritage, ancient Vijayanagara Empire capital","Mysore Palace — one of India's most visited monuments","Coorg — coffee and spice plantations","Jog Falls — one of India's highest waterfalls","Bengaluru — Silicon Valley of India"],contrib:["India's IT capital: Bengaluru hosts nearly 35% of India's IT and software exports","Largest producer of coffee in India","ISRO, India's space research organisation, is headquartered in Bengaluru","HAL, India's major aircraft manufacturer, is based here"],culture:"Famous for Bisi Bele Bath, Masala Dosa, Ragi Mudde, and Mysore Pak sweet. Known for Yakshagana theatre, Mysore Dasara festival, and Channapatna wooden toy craft.",fact:"Bengaluru is India's IT capital earning more foreign exchange from software exports than any other city. ISRO, which launched the Chandrayaan missions is located here."},
-{id:"KL",name:"Kerala",code:"KL",type:"State",capital:"Thiruvananthapuram",region:"South India",lang:"Malayalam",area:"38,852 km²",loc:"A narrow strip on India's southwestern tip, sandwiched between the Western Ghats mountains to the east and the Arabian Sea to the west. Called 'God's Own Country'.",attr:["Alleppey Backwaters — houseboat cruises on beautiful lagoons","Munnar — tea plantations and mist-covered hills","Periyar National Park — tigers and elephants","Kovalam and Varkala beaches","Thrissur Pooram — grandest temple festival in India"],contrib:["Highest literacy rate in India at 96.2%","Best Human Development Index among all Indian states","World's most important Ayurveda traditional medicine centre","Major producer and exporter of spices"],culture:"Famous for Kerala Sadya grand vegetarian feast on banana leaf, Appam with Stew, and Karimeen fish fry. Known for Kathakali and Mohiniyattam classical dance.",fact:"Kerala's Kalaripayattu martial art, over 3,000 years old, is considered the mother of all martial arts!"},
-{id:"MP",name:"Madhya Pradesh",code:"MP",type:"State",capital:"Bhopal",region:"Central India",lang:"Hindi",area:"3,08,252 km²",loc:"Located at the geographical centre of India — 'Madhya Pradesh' literally means 'Central Province.' India's second largest state by area, bordered by six states.",attr:["Khajuraho Temples — UNESCO World Heritage, 10th century medieval sculptures","Kanha and Bandhavgarh National Parks — among India's best tiger reserves","Sanchi Stupa — UNESCO World Heritage, India's oldest stone structure","Pachmarhi — Queen of Satpura hill station","Ujjain — one of 7 sacred Hindu cities, Kumbh Mela host"],contrib:["India's Tiger State with the highest number of tigers at over 785","Major diamond producer — India's only diamond mines are at Panna","Large soybean, wheat, and pulses producer","Rich in minerals including coal, iron ore, and manganese"],culture:"Famous for Dal Bafla, Poha-Jalebi popular breakfast, and Bhutte ka Kees corn snack. Known for Gond tribal art recognised by UNESCO.",fact:"Madhya Pradesh is India's Tiger State. Kanha National Park was the inspiration behind Rudyard Kipling's famous novel 'The Jungle Book'."},
-{id:"MH",name:"Maharashtra",code:"MH",type:"State",capital:"Mumbai",region:"West India",lang:"Marathi",area:"3,07,713 km²",loc:"Located on western and central India's Deccan Plateau. Bordered by Gujarat, Madhya Pradesh, Chhattisgarh, Telangana, Karnataka, Goa, and the Arabian Sea.",attr:["Mumbai — financial capital, Bollywood city, Gateway of India","Ajanta and Ellora Caves — UNESCO World Heritage","Chhatrapati Shivaji Maharaj's Forts including Raigad and Sinhagad","Shirdi — Sai Baba Temple","Pune — Oxford of the East"],contrib:["Contributes approximately 15% of India's total GDP — the highest of any state","Mumbai is India's financial capital","Bollywood, the world's most prolific film industry, is based in Mumbai","India's first railway line ran from Mumbai to Thane in 1853"],culture:"Famous for Vada Pav, Puran Poli, Modak Lord Ganesha's favourite sweet, and Bhakri. Known for Lavani and Tamasha folk performances.",fact:"India's first railway line ran from Mumbai to Thane on 16 April 1853!"},
-{id:"MN",name:"Manipur",code:"MN",type:"State",capital:"Imphal",region:"Northeast India",lang:"Meitei (Manipuri), English",area:"22,327 km²",loc:"A landlocked state in northeast India. The Imphal Valley in the centre is one of the most fertile plains in the entire northeast. Bordered by Nagaland, Mizoram, Assam, and Myanmar.",attr:["Loktak Lake — largest freshwater lake in northeast India with floating phumdis","Keibul Lamjao National Park — world's only floating national park","Ima Keithel — world's largest all-women market in Imphal","Kangla Fort — ancient royal seat","Shirui Lily Festival in the Shirui Hills"],contrib:["Important gateway to Southeast Asia under India's Act East Policy","Manipuri classical dance is one of India's 8 official classical dance forms","The sport of polo is believed to have originated in Manipur","Birthplace of Indian women's boxing"],culture:"Famous for Eromba fermented fish with vegetables, Singju fresh herb salad, and Chamthong vegetable stew. Known for Manipuri Ras Leela dance.",fact:"Six-time world boxing champion Mary Kom is from Manipur! And Manipur is believed to be the birthplace of polo."},
-{id:"ML",name:"Meghalaya",code:"ML",type:"State",capital:"Shillong",region:"Northeast India",lang:"Khasi, Garo, English",area:"22,429 km²",loc:"Located in northeast India, bordered by Assam and Bangladesh. The name means 'Abode of Clouds'. Home to Mawsynram — the wettest place on Earth.",attr:["Mawsynram and Cherrapunji — wettest places on Earth","Living Root Bridges — unique bridges made from living banyan tree roots","Dawki River — crystal-clear emerald-coloured water","Nohkalikai Falls — one of India's tallest waterfalls","Shillong — Scotland of the East"],contrib:["Mawsynram receives the highest average annual rainfall in the world","Rich coal and limestone reserves","Growing eco-tourism destination in northeast India","One of the few matrilineal societies in the world"],culture:"Famous for Jadoh rice cooked with pork and blood, and Tungrymbai fermented soybean. Known for Nongkrem dance festival.",fact:"Meghalaya has the world's wettest place, Mawsynram. And uniquely, children take their mother's surname — one of the world's few active matrilineal cultures!"},
-{id:"MZ",name:"Mizoram",code:"MZ",type:"State",capital:"Aizawl",region:"Northeast India",lang:"Mizo, English",area:"21,081 km²",loc:"A hilly state in the far south of northeast India, almost entirely forested at 91%. Bordered by Assam, Manipur, Myanmar, and Bangladesh. 'Mizoram' means 'Land of the Hill People'.",attr:["Phawngpui Blue Mountain — highest peak in Mizoram","Champhai — beautiful valley near the Myanmar border","Vantawng Falls — Mizoram's tallest waterfall","Reiek Heritage Village","Dampa Tiger Reserve"],contrib:["Second highest literacy rate in India after Kerala at 91.6%","Bamboo-rich state used in construction, furniture, food, and handicrafts","Unique community welfare system called Tlawmngaihna","Rich biodiversity and growing ecotourism potential"],culture:"Famous for Bai boiled vegetables with pork fat, and Zu rice wine. Known for Cheraw bamboo dance, colourful traditional handloom weaving.",fact:"Despite being a remote hilly state, Mizoram has the second highest literacy rate in India at over 91%."},
-{id:"NL",name:"Nagaland",code:"NL",type:"State",capital:"Kohima",region:"Northeast India",lang:"English, Nagamese, Ao",area:"16,579 km²",loc:"Located in the extreme northeast of India, a mountainous forested state. Bordered by Arunachal Pradesh, Assam, Manipur, and Myanmar. Home to 16 major Naga tribes.",attr:["Hornbill Festival — Festival of Festivals, held every December","Kohima War Cemetery — moving Second World War memorial","Dzukou Valley — stunning valley of seasonal flowers","Nagaland State Museum — rich tribal heritage","Khonoma — India's first declared green village"],contrib:["Preserves the rich cultural heritage of 16 unique Naga warrior tribes","The Battle of Kohima in 1944 was a decisive Second World War turning point","Khonoma is India's first green village pioneering conservation","Growing hub for organic farming and eco-tourism"],culture:"Famous for Smoked Pork with Bamboo Shoot. Known for the spectacular Hornbill Festival and colourful warrior attire.",fact:"The Battle of Kohima in 1944 is called the 'Stalingrad of the East.' British-Indian forces stopped the Japanese advance here!"},
-{id:"OD",name:"Odisha",code:"OD",type:"State",capital:"Bhubaneswar",region:"East India",lang:"Odia",area:"1,55,707 km²",loc:"Located on India's eastern coast along the Bay of Bengal. Bordered by West Bengal, Jharkhand, Chhattisgarh, Andhra Pradesh, and the Bay of Bengal.",attr:["Konark Sun Temple — UNESCO World Heritage, the Black Pagoda from the 13th century","Puri Jagannath Temple — one of the four Char Dham pilgrimage sites","Chilika Lake — Asia's largest coastal lagoon","Bhubaneswar — City of Temples","Rath Yatra — world's largest and oldest chariot festival"],contrib:["Rich mineral state with iron ore, coal, bauxite, and chromite","Puri's Rath Yatra draws millions of devotees","Major steel production hub with the Rourkela Steel Plant","Odissi is one of India's 8 classical dance forms"],culture:"Famous for Dalma lentil, Pakhala Bhata, and Chhena Poda baked cottage cheese sweet. Known for Odissi classical dance.",fact:"The English word 'Juggernaut' meaning an unstoppable overwhelming force comes from 'Jagannath' — the massive wooden chariot of Puri's Rath Yatra."},
-{id:"PB",name:"Punjab",code:"PB",type:"State",capital:"Chandigarh",region:"North India",lang:"Punjabi",area:"50,362 km²",loc:"Located in northwestern India. Bordered by Pakistan, Jammu and Kashmir, Himachal Pradesh, Haryana, and Rajasthan. The name means 'Land of Five Rivers'.",attr:["Golden Temple Harmandir Sahib in Amritsar — holiest shrine of Sikhism","Wagah Border Ceremony — daily flag-lowering parade","Jallianwala Bagh, Amritsar — historic site","Anandpur Sahib — birthplace of the Khalsa"],contrib:["Called the 'Granary of India'","The Green Revolution of the 1960s started in Punjab","Ludhiana is India's leading hub for hosiery, bicycles, and machine tools"],culture:"Famous for Makki di Roti with Sarson da Saag, Butter Chicken, Lassi, and Chole Bhature. Known for Bhangra and Giddha folk dances.",fact:"The Golden Temple in Amritsar serves free community meals to over 1,00,000 people every single day — making it one of the world's largest free kitchens!"},
-{id:"RJ",name:"Rajasthan",code:"RJ",type:"State",capital:"Jaipur",region:"North India",lang:"Hindi, Rajasthani",area:"3,42,239 km²",loc:"India's largest state by area. Located in northwestern India, bordered by Pakistan, Gujarat, Madhya Pradesh, Uttar Pradesh, Haryana, and Punjab. The Thar Desert covers the west.",attr:["Jaipur — the Pink City, a UNESCO World Heritage planned city","Jodhpur — the Blue City","Jaisalmer — the Golden City","Udaipur — the City of Lakes","Ranthambore National Park","Pushkar Camel Fair"],contrib:["India's largest state by area — bigger than France","Largest producer of minerals in India including zinc, lead, and silver","Rajasthan contributes the most to India's tourism revenue"],culture:"Famous for Dal Baati Churma, Ghevar sweet, and Laal Maas fiery mutton curry. Known for Ghoomar dance.",fact:"Jaipur was the world's first fully planned city — built in just 4 years by Maharaja Sawai Jai Singh the Second in 1727."},
-{id:"SK",name:"Sikkim",code:"SK",type:"State",capital:"Gangtok",region:"Northeast India",lang:"Nepali, Sikkimese, Lepcha",area:"7,096 km²",loc:"India's smallest state by area, nestled in the northeastern Himalayas. Bordered by Nepal, Tibet, Bhutan, and West Bengal. The world's third-highest peak, Kangchenjunga, is here.",attr:["Kangchenjunga — world's third highest peak","Rumtek Monastery","Gurudongmar Lake — one of the world's highest lakes","Tsomgo Changu Lake","Nathu La Pass — ancient Silk Route trade pass"],contrib:["India's first fully organic state since 2016","Major cardamom producer","Nathu La Pass is an important trade corridor between India and China"],culture:"Famous for Momos, Thukpa noodle soup, and Phagshapa. Known for Buddhist Cham mask dances.",fact:"Sikkim became India's first fully organic state in 2016 — the entire state uses no chemical fertilisers or pesticides!"},
-{id:"TN",name:"Tamil Nadu",code:"TN",type:"State",capital:"Chennai",region:"South India",lang:"Tamil",area:"1,30,058 km²",loc:"Located at the southernmost tip of peninsular India. Bordered by Kerala, Karnataka, Andhra Pradesh. India's southernmost point, Kanyakumari, is here.",attr:["Meenakshi Amman Temple in Madurai","Brihadeeswarar Temple in Thanjavur","Ooty and Kodaikanal — hill stations","Marina Beach in Chennai","Mahabalipuram — UNESCO World Heritage"],contrib:["One of India's top automobile manufacturing hubs — called the Detroit of India","Leads India in film production after Mumbai","Bharatanatyam, India's most widely practised classical dance, originated here"],culture:"Famous for Idli-Sambar, Dosa, and Filter Coffee. Known for Bharatanatyam dance and Carnatic music.",fact:"Tamil is one of the world's oldest living classical languages with literature dating back over 2,000 years."},
-{id:"TS",name:"Telangana",code:"TS",type:"State",capital:"Hyderabad",region:"South India",lang:"Telugu, Urdu",area:"1,12,077 km²",loc:"India's newest state, formed on 2 June 2014 from Andhra Pradesh. Located in south-central India. Bordered by Maharashtra, Chhattisgarh, Odisha, Andhra Pradesh, and Karnataka.",attr:["Charminar in Hyderabad","Golconda Fort","Ramoji Film City — Guinness-certified world's largest film studio","Warangal Fort","Hussain Sagar Lake"],contrib:["Hyderabad is a global IT and pharmaceutical hub called Cyberabad","India's top bulk drug manufacturing state","Golconda was historically the source of the world's most famous diamonds"],culture:"Famous for Hyderabadi Dum Biryani, and Haleem. Known for Perini Sivatandavam ancient warrior dance.",fact:"The world-famous Kohinoor diamond — now part of the British Crown Jewels — was originally mined at Golconda, Telangana!"},
-{id:"TR",name:"Tripura",code:"TR",type:"State",capital:"Agartala",region:"Northeast India",lang:"Bengali, Kokborok",area:"10,486 km²",loc:"A small state in northeast India, almost entirely surrounded by Bangladesh on three sides. Bordered by Assam and Mizoram to the east.",attr:["Ujjayanta Palace in Agartala","Neermahal — India's largest water palace","Unakoti — extraordinary rock-cut sculptures","Tripura Sundari Temple","Jampui Hills"],contrib:["Natural gas reserves — an important energy source for northeast India","Second largest natural rubber producer in India","Cultural and geographical bridge between India and Bangladesh"],culture:"Famous for Mui Borok traditional Tripuri cuisine. Known for Hojagiri dance.",fact:"Tripura is almost completely surrounded by Bangladesh — it has only a 56 kilometre border with the rest of India!"},
-{id:"UP",name:"Uttar Pradesh",code:"UP",type:"State",capital:"Lucknow",region:"North India",lang:"Hindi, Urdu",area:"2,40,928 km²",loc:"Located in the northern Indo-Gangetic plains. The most populous state in India.",attr:["Taj Mahal in Agra — 7th Wonder of the World","Varanasi — world's oldest continuously inhabited city","Ayodhya","Mathura and Vrindavan","Prayagraj — host of the Kumbh Mela"],contrib:["Most populous state in India","India's largest producer of sugarcane, wheat, and food grains","Houses the most UNESCO World Heritage Sites in India"],culture:"Famous for Lucknowi Awadhi Dum Biryani, Galouti Kebabs. Known for Kathak classical dance, and Banarasi silk sarees.",fact:"Uttar Pradesh is so large that if it were a separate country, it would be the 5th most populous nation on Earth!"},
-{id:"UK",name:"Uttarakhand",code:"UK",type:"State",capital:"Dehradun",region:"North India",lang:"Hindi, Garhwali, Kumaoni",area:"53,483 km²",loc:"Located in the northern Himalayas, carved out of Uttar Pradesh in 2000. Bordered by China, Nepal. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Char Dham — Badrinath, Kedarnath, Gangotri, Yamunotri","Haridwar","Rishikesh — Yoga Capital of the World","Jim Corbett National Park","Valley of Flowers — UNESCO World Heritage"],contrib:["Source of the Ganga and Yamuna rivers","Jim Corbett National Park was India's first national park","Haridwar and Rishikesh are world-leading centres of yoga"],culture:"Famous for Aloo Ke Gutke, Kafuli. Known for Garhwali and Kumaoni folk music.",fact:"Rishikesh is the Yoga Capital of the World. The Beatles visited here in 1968 and composed many songs for the White Album!"},
-{id:"WB",name:"West Bengal",code:"WB",type:"State",capital:"Kolkata",region:"East India",lang:"Bengali, Hindi",area:"88,752 km²",loc:"Located in eastern India along the Bay of Bengal coast. The Sundarbans mangrove delta is in the south.",attr:["Sundarbans — UNESCO World Heritage","Victoria Memorial in Kolkata","Darjeeling — famous hill station and Toy Train","Howrah Bridge","Bishnupur"],contrib:["Kolkata served as the capital of British India for over 100 years","Major jute producer","Darjeeling tea is among the world's most expensive"],culture:"Famous for Rosogolla with GI tag, Mishti Doi, Machh-Bhaat. Known for Durga Puja and Rabindra Sangeet.",fact:"Rabindranath Tagore, born in Kolkata, is the only person in history to have written the national anthems of two different countries — India and Bangladesh!"},
+{id:"AP",name:"Andhra Pradesh",code:"AP",type:"State",capital:"Amaravati",region:"South India",lang:"Telugu",area:"1,62,975 kmÂ²",loc:"Located on the southeastern coast of India along the Bay of Bengal. Bordered by Telangana and Chhattisgarh to the north, Odisha to the northeast, Karnataka and Tamil Nadu to the west and south.",attr:["Tirumala Venkateswara Temple, Tirupati â€” world's most visited pilgrimage site","Araku Valley â€” scenic hill station with tribal culture","Borra Caves â€” ancient limestone caves","Vijayawada â€” historical city on the Krishna River","Nagarjunakonda â€” ancient Buddhist heritage site"],contrib:["Known as the 'Rice Bowl of India' â€” major rice-producing state","Tirupati temple is the world's richest, receiving over â‚¹1,000 crore annually","Major IT corridor in Vizag and Amaravati region","Leading producer of tobacco, sugarcane, chillies, and cotton"],culture:"Famous for Pesarattu, Gongura pachadi, and Hyderabadi-style biryani. Known for Kuchipudi classical dance, Kalamkari textile art, and Kondapalli wooden toys.",fact:"The Tirumala Venkateswara Temple in Tirupati receives over 50,000 devotees every single day â€” more than the Vatican or Mecca â€” making it the most visited place of worship on Earth!"},
+{id:"AR",name:"Arunachal Pradesh",code:"AR",type:"State",capital:"Itanagar",region:"Northeast India",lang:"English, Nyishi, Adi, Bengali",area:"83,743 kmÂ²",loc:"The easternmost state of India â€” the first place in India to see the sunrise each day. Shares borders with Bhutan, China, and Myanmar. Called 'Land of the Rising Sun'.",attr:["Tawang Monastery â€” largest monastery in India","Ziro Valley â€” UNESCO World Heritage nominated","Namdapha National Park â€” rich biodiversity","Sela Pass â€” high-altitude mountain pass","Mechuka Valley â€” remote and breathtaking"],contrib:["Strategically crucial for India's northeastern border","One of the world's 36 biodiversity hotspots","Enormous hydroelectric power potential","Home to 26 major tribes preserving unique ancient cultures"],culture:"Famous for Thukpa, Apong rice beer, and bamboo shoot dishes. Known for colourful tribal festivals like Losar and Ponung dance.",fact:"Arunachal Pradesh is larger than the entire country of Austria! It is home to Kibithoo, the easternmost town in India, where the sun rises first in the country."},
+{id:"AS",name:"Assam",code:"AS",type:"State",capital:"Dispur",region:"Northeast India",lang:"Assamese, Bengali, Bodo",area:"78,438 kmÂ²",loc:"Located in the Brahmaputra river valley in northeast India â€” the gateway to the Seven Sister States. Shares borders with Bhutan, Bangladesh, and six Indian states.",attr:["Kaziranga National Park â€” UNESCO World Heritage Site","Majuli Island â€” world's largest river island","Kamakhya Temple â€” famous Shakti pilgrimage site","Manas National Park â€” UNESCO World Heritage","Tea Gardens of Jorhat and Dibrugarh"],contrib:["World-famous Assam tea â€” largest tea-producing region in India","Kaziranga shelters two-thirds of Earth's one-horned rhinoceroses","Digboi has India's oldest operational oil refinery, established in 1889","Muga silk is the world's rarest golden-yellow silk, found nowhere else"],culture:"Famous for Masor Tenga, Pitha rice cakes, and Jolpan. Known for Bihu festival, Sattriya dance recognised by UNESCO, and bamboo craft.",fact:"Assam's Muga silk is a golden-yellow natural silk unique to this state â€” it gets more lustrous and stronger with every wash! Kaziranga has more rhinos per square kilometre than anywhere else on Earth."},
+{id:"BR",name:"Bihar",code:"BR",type:"State",capital:"Patna",region:"East India",lang:"Hindi, Maithili, Bhojpuri",area:"94,163 kmÂ²",loc:"Located in the eastern Indo-Gangetic plains, bordered by Nepal, Uttar Pradesh, Jharkhand, and West Bengal. The sacred Ganga river flows through Bihar.",attr:["Bodh Gaya â€” where Lord Buddha attained enlightenment, a UNESCO World Heritage Site","Nalanda â€” ruins of the ancient world's greatest university","Rajgir â€” historic city of the Magadha kingdom","Vaishali â€” birthplace of Lord Mahavira, founder of Jainism","Patna Sahib â€” sacred Sikh Gurudwara"],contrib:["Birthplace of two world religions: Buddhism and Jainism","Nalanda University was one of the world's first residential universities with 10,000 students","The Magadha Empire unified most of ancient India under Chandragupta Maurya and Ashoka","Major vegetable and fruit producer for eastern India"],culture:"Famous for Litti Chokha, Sattu drink, and Thekua festive sweet. Known for Madhubani painting, Chhath Puja festival, and Sonepur Mela â€” Asia's largest cattle fair.",fact:"Chhath Puja is the only major Hindu festival where worship is offered directly to the rising and setting Sun at a riverbank â€” with no idol or priest required. It is one of the most ancient sun-worship traditions still practiced today!"},
+{id:"CG",name:"Chhattisgarh",code:"CG",type:"State",capital:"Raipur",region:"Central India",lang:"Hindi, Chhattisgarhi",area:"1,35,192 kmÂ²",loc:"A large landlocked state in central India, carved out of Madhya Pradesh in 2000. About 44% of the state is covered by dense forest.",attr:["Chitrakote Falls â€” India's widest waterfall, the Niagara of India","Kanger Valley National Park","Bastar â€” famous for unique tribal culture","Sirpur â€” ancient Buddhist-Hindu heritage town","Barnawapara Wildlife Sanctuary"],contrib:["Called the 'Rice Bowl of Central India'","Contributes about 15% of India's total steel production","Vast mineral wealth including coal, iron ore, limestone, and bauxite","Dense forests produce timber, tendu leaves, and bamboo"],culture:"Famous for Chila rice pancakes, Bafauri steamed lentil dumplings, and Aamat tribal curry. Known for Bastar tribal art, Dhokra metal casting â€” a 3,000-year-old technique â€” and Panthi and Karma folk dances.",fact:"Chhattisgarh has one of India's highest tribal populations at over 30%. Its Bastar Dussehra is the world's longest-running festival, celebrated over 75 days â€” far longer than any other Dussehra in India!"},
+{id:"GA",name:"Goa",code:"GA",type:"State",capital:"Panaji",region:"West India",lang:"Konkani, Marathi, English",area:"3,702 kmÂ²",loc:"India's smallest state by area, on the western Konkan coast. Bordered by Maharashtra, Karnataka, and the Arabian Sea. It was a Portuguese colony for 451 years until liberated in 1961.",attr:["Baga, Calangute, Anjuna, and Palolem Beaches","Basilica of Bom Jesus â€” UNESCO World Heritage","Dudhsagar Waterfalls â€” one of India's tallest","Old Goa Churches and Convents â€” UNESCO Heritage","Goa Carnival â€” vibrant annual festival"],contrib:["Highest per capita income among all Indian states","India's top tourism destination contributing significantly to foreign exchange","Major cashew and spice exporter","Preserved rare Portuguese-Goan architectural and cultural heritage","Important fishing and seafood industry"],culture:"Famous for Fish Curry Rice, Bebinca layered coconut dessert, and Feni liquor. Known for Konkani music, Dekhnni and Fugdi folk dances, and a unique blend of Hindu and Portuguese traditions.",fact:"Goa was under Portuguese colonial rule for 451 years from 1510 to 1961 â€” longer than the British ruled any other part of India! The Indian Army liberated it in just 2 days in Operation Vijay on 19 December 1961."},
+{id:"GJ",name:"Gujarat",code:"GJ",type:"State",capital:"Gandhinagar",region:"West India",lang:"Gujarati",area:"1,96,024 kmÂ²",loc:"Located in western India with India's longest coastline of over 1,600 kilometres. Bordered by Rajasthan, Madhya Pradesh, Maharashtra, Pakistan, and the Arabian Sea.",attr:["Gir National Park â€” the only habitat of wild Asiatic lions in the world","Rann of Kutch â€” world's largest salt desert","Statue of Unity â€” world's tallest statue at 182 metres","Somnath Temple â€” first of the 12 Jyotirlingas","Dwarkadhish Temple â€” one of the four Char Dham"],contrib:["India's largest pharmaceutical hub, the Pharmacy of the World","Surat processes over 90% of the world's rough diamonds","Amul cooperative is the world's largest milk cooperative","Major petrochemical and chemical industry centre","Birthplace of Mahatma Gandhi and Sardar Vallabhbhai Patel"],culture:"Famous for Dhokla, Thepla, Fafda-Jalebi, and Khakhra. Known for Garba and Dandiya Raas dance during Navratri, Bandhani tie-dye, Patola silk weaving, and Rogan art from Kutch.",fact:"The Statue of Unity in Gujarat is the world's tallest statue at 182 metres â€” twice the height of the Statue of Liberty! It is a tribute to Sardar Vallabhbhai Patel who unified 562 princely states into modern India."},
+{id:"HR",name:"Haryana",code:"HR",type:"State",capital:"Chandigarh",region:"North India",lang:"Hindi, Haryanvi",area:"44,212 kmÂ²",loc:"Located in northern India, Haryana almost completely surrounds Delhi on three sides. Bordered by Punjab, Himachal Pradesh, Uttarakhand, Uttar Pradesh, and Rajasthan.",attr:["Kurukshetra â€” site of the great Mahabharata war","Brahma Sarovar â€” sacred lake at Kurukshetra","Sultanpur Bird Sanctuary","Pinjore Gardens","Surajkund â€” annual international crafts fair"],contrib:["One of India's leading states in wheat and rice production","Gurugram and Faridabad are major IT, automobile, and manufacturing hubs","Produces the most Olympic medal-winning wrestlers and athletes per capita","Leads India in milk and dairy production per capita"],culture:"Famous for Bajre ki Khichdi, Kadhi pakoda, and Besan masala roti. Known for Phulkari embroidery, Haryanvi folk songs, and a strong wrestling and sports culture.",fact:"Haryana is India's sports powerhouse, producing more Olympic and Commonwealth Games medal winners per capita than almost any other state. Neeraj Chopra from Haryana won India's first athletics gold medal at the Tokyo Olympics 2020!"},
+{id:"HP",name:"Himachal Pradesh",code:"HP",type:"State",capital:"Shimla / Dharamshala",region:"North India",lang:"Hindi, Pahari, Punjabi",area:"55,673 kmÂ²",loc:"A mountainous state in the western Himalayas, bordered by Jammu and Kashmir, Punjab, Haryana, Uttarakhand, and China. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Shimla â€” former summer capital of British India","Manali and Rohtang Pass â€” adventure tourism","Spiti Valley â€” remote cold desert landscape","Dharamshala â€” home of the Dalai Lama in exile","Khajjiar â€” called India's mini-Switzerland"],contrib:["Major apple producer contributing over 25% of India's total apple output","Significant hydroelectric power generation for northern India","Key centre for Tibetan Buddhism in India","Important hill station tourism hub"],culture:"Famous for Siddu steamed wheat bread, Madra chickpea curry, and Dham grand festival feast. Known for Kinnauri and Kullu shawls, Nati folk dance, and Chamba Rumal embroidery.",fact:"Himachal Pradesh's Nati dance holds a Guinness World Record for being performed simultaneously by over 10,000 dancers at one event!"},
+{id:"JH",name:"Jharkhand",code:"JH",type:"State",capital:"Ranchi",region:"East India",lang:"Hindi, Santali, Bengali",area:"79,716 kmÂ²",loc:"Located in eastern India on the Chota Nagpur Plateau, carved out of southern Bihar in 2000. Bordered by Bihar, West Bengal, Odisha, Chhattisgarh, and Uttar Pradesh.",attr:["Hundru Falls â€” beautiful waterfall near Ranchi","Betla National Park â€” tigers and elephants","Deoghar â€” important Jyotirlinga temple","Netarhat â€” Queen of Chotanagpur hill station","Jonha Gautamdhara Falls"],contrib:["India's mineral capital holding nearly 40% of the country's entire mineral reserves","Major coal, iron ore, copper, uranium, and mica producer","TATA Steel in Jamshedpur â€” one of Asia's largest integrated steel plants","Chhau dance, a UNESCO Intangible Cultural Heritage, originated here"],culture:"Famous for Thekua, Dhuska fried rice-lentil bread, and Litti Chokha. Known for Sohrai and Khovar tribal wall painting, Chhau mask dance, and Sarhul and Karma tribal festivals.",fact:"Jamshedpur in Jharkhand was built by TATA Steel in 1907 and is India's best-known planned industrial city."},
+{id:"KA",name:"Karnataka",code:"KA",type:"State",capital:"Bengaluru",region:"South India",lang:"Kannada",area:"1,91,791 kmÂ²",loc:"Located in the Deccan Plateau of southwestern India. Bordered by Goa, Maharashtra, Telangana, Andhra Pradesh, Tamil Nadu, Kerala, and the Arabian Sea.",attr:["Hampi â€” UNESCO World Heritage, ancient Vijayanagara Empire capital","Mysore Palace â€” one of India's most visited monuments","Coorg â€” coffee and spice plantations","Jog Falls â€” one of India's highest waterfalls","Bengaluru â€” Silicon Valley of India"],contrib:["India's IT capital: Bengaluru hosts nearly 35% of India's IT and software exports","Largest producer of coffee in India","ISRO, India's space research organisation, is headquartered in Bengaluru","HAL, India's major aircraft manufacturer, is based here"],culture:"Famous for Bisi Bele Bath, Masala Dosa, Ragi Mudde, and Mysore Pak sweet. Known for Yakshagana theatre, Mysore Dasara festival, and Channapatna wooden toy craft.",fact:"Bengaluru is India's IT capital earning more foreign exchange from software exports than any other city. ISRO, which launched the Chandrayaan missions is located here."},
+{id:"KL",name:"Kerala",code:"KL",type:"State",capital:"Thiruvananthapuram",region:"South India",lang:"Malayalam",area:"38,852 kmÂ²",loc:"A narrow strip on India's southwestern tip, sandwiched between the Western Ghats mountains to the east and the Arabian Sea to the west. Called 'God's Own Country'.",attr:["Alleppey Backwaters â€” houseboat cruises on beautiful lagoons","Munnar â€” tea plantations and mist-covered hills","Periyar National Park â€” tigers and elephants","Kovalam and Varkala beaches","Thrissur Pooram â€” grandest temple festival in India"],contrib:["Highest literacy rate in India at 96.2%","Best Human Development Index among all Indian states","World's most important Ayurveda traditional medicine centre","Major producer and exporter of spices"],culture:"Famous for Kerala Sadya grand vegetarian feast on banana leaf, Appam with Stew, and Karimeen fish fry. Known for Kathakali and Mohiniyattam classical dance.",fact:"Kerala's Kalaripayattu martial art, over 3,000 years old, is considered the mother of all martial arts!"},
+{id:"MP",name:"Madhya Pradesh",code:"MP",type:"State",capital:"Bhopal",region:"Central India",lang:"Hindi",area:"3,08,252 kmÂ²",loc:"Located at the geographical centre of India â€” 'Madhya Pradesh' literally means 'Central Province.' India's second largest state by area, bordered by six states.",attr:["Khajuraho Temples â€” UNESCO World Heritage, 10th century medieval sculptures","Kanha and Bandhavgarh National Parks â€” among India's best tiger reserves","Sanchi Stupa â€” UNESCO World Heritage, India's oldest stone structure","Pachmarhi â€” Queen of Satpura hill station","Ujjain â€” one of 7 sacred Hindu cities, Kumbh Mela host"],contrib:["India's Tiger State with the highest number of tigers at over 785","Major diamond producer â€” India's only diamond mines are at Panna","Large soybean, wheat, and pulses producer","Rich in minerals including coal, iron ore, and manganese"],culture:"Famous for Dal Bafla, Poha-Jalebi popular breakfast, and Bhutte ka Kees corn snack. Known for Gond tribal art recognised by UNESCO.",fact:"Madhya Pradesh is India's Tiger State. Kanha National Park was the inspiration behind Rudyard Kipling's famous novel 'The Jungle Book'."},
+{id:"MH",name:"Maharashtra",code:"MH",type:"State",capital:"Mumbai",region:"West India",lang:"Marathi",area:"3,07,713 kmÂ²",loc:"Located on western and central India's Deccan Plateau. Bordered by Gujarat, Madhya Pradesh, Chhattisgarh, Telangana, Karnataka, Goa, and the Arabian Sea.",attr:["Mumbai â€” financial capital, Bollywood city, Gateway of India","Ajanta and Ellora Caves â€” UNESCO World Heritage","Chhatrapati Shivaji Maharaj's Forts including Raigad and Sinhagad","Shirdi â€” Sai Baba Temple","Pune â€” Oxford of the East"],contrib:["Contributes approximately 15% of India's total GDP â€” the highest of any state","Mumbai is India's financial capital","Bollywood, the world's most prolific film industry, is based in Mumbai","India's first railway line ran from Mumbai to Thane in 1853"],culture:"Famous for Vada Pav, Puran Poli, Modak Lord Ganesha's favourite sweet, and Bhakri. Known for Lavani and Tamasha folk performances.",fact:"India's first railway line ran from Mumbai to Thane on 16 April 1853!"},
+{id:"MN",name:"Manipur",code:"MN",type:"State",capital:"Imphal",region:"Northeast India",lang:"Meitei (Manipuri), English",area:"22,327 kmÂ²",loc:"A landlocked state in northeast India. The Imphal Valley in the centre is one of the most fertile plains in the entire northeast. Bordered by Nagaland, Mizoram, Assam, and Myanmar.",attr:["Loktak Lake â€” largest freshwater lake in northeast India with floating phumdis","Keibul Lamjao National Park â€” world's only floating national park","Ima Keithel â€” world's largest all-women market in Imphal","Kangla Fort â€” ancient royal seat","Shirui Lily Festival in the Shirui Hills"],contrib:["Important gateway to Southeast Asia under India's Act East Policy","Manipuri classical dance is one of India's 8 official classical dance forms","The sport of polo is believed to have originated in Manipur","Birthplace of Indian women's boxing"],culture:"Famous for Eromba fermented fish with vegetables, Singju fresh herb salad, and Chamthong vegetable stew. Known for Manipuri Ras Leela dance.",fact:"Six-time world boxing champion Mary Kom is from Manipur! And Manipur is believed to be the birthplace of polo."},
+{id:"ML",name:"Meghalaya",code:"ML",type:"State",capital:"Shillong",region:"Northeast India",lang:"Khasi, Garo, English",area:"22,429 kmÂ²",loc:"Located in northeast India, bordered by Assam and Bangladesh. The name means 'Abode of Clouds'. Home to Mawsynram â€” the wettest place on Earth.",attr:["Mawsynram and Cherrapunji â€” wettest places on Earth","Living Root Bridges â€” unique bridges made from living banyan tree roots","Dawki River â€” crystal-clear emerald-coloured water","Nohkalikai Falls â€” one of India's tallest waterfalls","Shillong â€” Scotland of the East"],contrib:["Mawsynram receives the highest average annual rainfall in the world","Rich coal and limestone reserves","Growing eco-tourism destination in northeast India","One of the few matrilineal societies in the world"],culture:"Famous for Jadoh rice cooked with pork and blood, and Tungrymbai fermented soybean. Known for Nongkrem dance festival.",fact:"Meghalaya has the world's wettest place, Mawsynram. And uniquely, children take their mother's surname â€” one of the world's few active matrilineal cultures!"},
+{id:"MZ",name:"Mizoram",code:"MZ",type:"State",capital:"Aizawl",region:"Northeast India",lang:"Mizo, English",area:"21,081 kmÂ²",loc:"A hilly state in the far south of northeast India, almost entirely forested at 91%. Bordered by Assam, Manipur, Myanmar, and Bangladesh. 'Mizoram' means 'Land of the Hill People'.",attr:["Phawngpui Blue Mountain â€” highest peak in Mizoram","Champhai â€” beautiful valley near the Myanmar border","Vantawng Falls â€” Mizoram's tallest waterfall","Reiek Heritage Village","Dampa Tiger Reserve"],contrib:["Second highest literacy rate in India after Kerala at 91.6%","Bamboo-rich state used in construction, furniture, food, and handicrafts","Unique community welfare system called Tlawmngaihna","Rich biodiversity and growing ecotourism potential"],culture:"Famous for Bai boiled vegetables with pork fat, and Zu rice wine. Known for Cheraw bamboo dance, colourful traditional handloom weaving.",fact:"Despite being a remote hilly state, Mizoram has the second highest literacy rate in India at over 91%."},
+{id:"NL",name:"Nagaland",code:"NL",type:"State",capital:"Kohima",region:"Northeast India",lang:"English, Nagamese, Ao",area:"16,579 kmÂ²",loc:"Located in the extreme northeast of India, a mountainous forested state. Bordered by Arunachal Pradesh, Assam, Manipur, and Myanmar. Home to 16 major Naga tribes.",attr:["Hornbill Festival â€” Festival of Festivals, held every December","Kohima War Cemetery â€” moving Second World War memorial","Dzukou Valley â€” stunning valley of seasonal flowers","Nagaland State Museum â€” rich tribal heritage","Khonoma â€” India's first declared green village"],contrib:["Preserves the rich cultural heritage of 16 unique Naga warrior tribes","The Battle of Kohima in 1944 was a decisive Second World War turning point","Khonoma is India's first green village pioneering conservation","Growing hub for organic farming and eco-tourism"],culture:"Famous for Smoked Pork with Bamboo Shoot. Known for the spectacular Hornbill Festival and colourful warrior attire.",fact:"The Battle of Kohima in 1944 is called the 'Stalingrad of the East.' British-Indian forces stopped the Japanese advance here!"},
+{id:"OD",name:"Odisha",code:"OD",type:"State",capital:"Bhubaneswar",region:"East India",lang:"Odia",area:"1,55,707 kmÂ²",loc:"Located on India's eastern coast along the Bay of Bengal. Bordered by West Bengal, Jharkhand, Chhattisgarh, Andhra Pradesh, and the Bay of Bengal.",attr:["Konark Sun Temple â€” UNESCO World Heritage, the Black Pagoda from the 13th century","Puri Jagannath Temple â€” one of the four Char Dham pilgrimage sites","Chilika Lake â€” Asia's largest coastal lagoon","Bhubaneswar â€” City of Temples","Rath Yatra â€” world's largest and oldest chariot festival"],contrib:["Rich mineral state with iron ore, coal, bauxite, and chromite","Puri's Rath Yatra draws millions of devotees","Major steel production hub with the Rourkela Steel Plant","Odissi is one of India's 8 classical dance forms"],culture:"Famous for Dalma lentil, Pakhala Bhata, and Chhena Poda baked cottage cheese sweet. Known for Odissi classical dance.",fact:"The English word 'Juggernaut' meaning an unstoppable overwhelming force comes from 'Jagannath' â€” the massive wooden chariot of Puri's Rath Yatra."},
+{id:"PB",name:"Punjab",code:"PB",type:"State",capital:"Chandigarh",region:"North India",lang:"Punjabi",area:"50,362 kmÂ²",loc:"Located in northwestern India. Bordered by Pakistan, Jammu and Kashmir, Himachal Pradesh, Haryana, and Rajasthan. The name means 'Land of Five Rivers'.",attr:["Golden Temple Harmandir Sahib in Amritsar â€” holiest shrine of Sikhism","Wagah Border Ceremony â€” daily flag-lowering parade","Jallianwala Bagh, Amritsar â€” historic site","Anandpur Sahib â€” birthplace of the Khalsa"],contrib:["Called the 'Granary of India'","The Green Revolution of the 1960s started in Punjab","Ludhiana is India's leading hub for hosiery, bicycles, and machine tools"],culture:"Famous for Makki di Roti with Sarson da Saag, Butter Chicken, Lassi, and Chole Bhature. Known for Bhangra and Giddha folk dances.",fact:"The Golden Temple in Amritsar serves free community meals to over 1,00,000 people every single day â€” making it one of the world's largest free kitchens!"},
+{id:"RJ",name:"Rajasthan",code:"RJ",type:"State",capital:"Jaipur",region:"North India",lang:"Hindi, Rajasthani",area:"3,42,239 kmÂ²",loc:"India's largest state by area. Located in northwestern India, bordered by Pakistan, Gujarat, Madhya Pradesh, Uttar Pradesh, Haryana, and Punjab. The Thar Desert covers the west.",attr:["Jaipur â€” the Pink City, a UNESCO World Heritage planned city","Jodhpur â€” the Blue City","Jaisalmer â€” the Golden City","Udaipur â€” the City of Lakes","Ranthambore National Park","Pushkar Camel Fair"],contrib:["India's largest state by area â€” bigger than France","Largest producer of minerals in India including zinc, lead, and silver","Rajasthan contributes the most to India's tourism revenue"],culture:"Famous for Dal Baati Churma, Ghevar sweet, and Laal Maas fiery mutton curry. Known for Ghoomar dance.",fact:"Jaipur was the world's first fully planned city â€” built in just 4 years by Maharaja Sawai Jai Singh the Second in 1727."},
+{id:"SK",name:"Sikkim",code:"SK",type:"State",capital:"Gangtok",region:"Northeast India",lang:"Nepali, Sikkimese, Lepcha",area:"7,096 kmÂ²",loc:"India's smallest state by area, nestled in the northeastern Himalayas. Bordered by Nepal, Tibet, Bhutan, and West Bengal. The world's third-highest peak, Kangchenjunga, is here.",attr:["Kangchenjunga â€” world's third highest peak","Rumtek Monastery","Gurudongmar Lake â€” one of the world's highest lakes","Tsomgo Changu Lake","Nathu La Pass â€” ancient Silk Route trade pass"],contrib:["India's first fully organic state since 2016","Major cardamom producer","Nathu La Pass is an important trade corridor between India and China"],culture:"Famous for Momos, Thukpa noodle soup, and Phagshapa. Known for Buddhist Cham mask dances.",fact:"Sikkim became India's first fully organic state in 2016 â€” the entire state uses no chemical fertilisers or pesticides!"},
+{id:"TN",name:"Tamil Nadu",code:"TN",type:"State",capital:"Chennai",region:"South India",lang:"Tamil",area:"1,30,058 kmÂ²",loc:"Located at the southernmost tip of peninsular India. Bordered by Kerala, Karnataka, Andhra Pradesh. India's southernmost point, Kanyakumari, is here.",attr:["Meenakshi Amman Temple in Madurai","Brihadeeswarar Temple in Thanjavur","Ooty and Kodaikanal â€” hill stations","Marina Beach in Chennai","Mahabalipuram â€” UNESCO World Heritage"],contrib:["One of India's top automobile manufacturing hubs â€” called the Detroit of India","Leads India in film production after Mumbai","Bharatanatyam, India's most widely practised classical dance, originated here"],culture:"Famous for Idli-Sambar, Dosa, and Filter Coffee. Known for Bharatanatyam dance and Carnatic music.",fact:"Tamil is one of the world's oldest living classical languages with literature dating back over 2,000 years."},
+{id:"TS",name:"Telangana",code:"TS",type:"State",capital:"Hyderabad",region:"South India",lang:"Telugu, Urdu",area:"1,12,077 kmÂ²",loc:"India's newest state, formed on 2 June 2014 from Andhra Pradesh. Located in south-central India. Bordered by Maharashtra, Chhattisgarh, Odisha, Andhra Pradesh, and Karnataka.",attr:["Charminar in Hyderabad","Golconda Fort","Ramoji Film City â€” Guinness-certified world's largest film studio","Warangal Fort","Hussain Sagar Lake"],contrib:["Hyderabad is a global IT and pharmaceutical hub called Cyberabad","India's top bulk drug manufacturing state","Golconda was historically the source of the world's most famous diamonds"],culture:"Famous for Hyderabadi Dum Biryani, and Haleem. Known for Perini Sivatandavam ancient warrior dance.",fact:"The world-famous Kohinoor diamond â€” now part of the British Crown Jewels â€” was originally mined at Golconda, Telangana!"},
+{id:"TR",name:"Tripura",code:"TR",type:"State",capital:"Agartala",region:"Northeast India",lang:"Bengali, Kokborok",area:"10,486 kmÂ²",loc:"A small state in northeast India, almost entirely surrounded by Bangladesh on three sides. Bordered by Assam and Mizoram to the east.",attr:["Ujjayanta Palace in Agartala","Neermahal â€” India's largest water palace","Unakoti â€” extraordinary rock-cut sculptures","Tripura Sundari Temple","Jampui Hills"],contrib:["Natural gas reserves â€” an important energy source for northeast India","Second largest natural rubber producer in India","Cultural and geographical bridge between India and Bangladesh"],culture:"Famous for Mui Borok traditional Tripuri cuisine. Known for Hojagiri dance.",fact:"Tripura is almost completely surrounded by Bangladesh â€” it has only a 56 kilometre border with the rest of India!"},
+{id:"UP",name:"Uttar Pradesh",code:"UP",type:"State",capital:"Lucknow",region:"North India",lang:"Hindi, Urdu",area:"2,40,928 kmÂ²",loc:"Located in the northern Indo-Gangetic plains. The most populous state in India.",attr:["Taj Mahal in Agra â€” 7th Wonder of the World","Varanasi â€” world's oldest continuously inhabited city","Ayodhya","Mathura and Vrindavan","Prayagraj â€” host of the Kumbh Mela"],contrib:["Most populous state in India","India's largest producer of sugarcane, wheat, and food grains","Houses the most UNESCO World Heritage Sites in India"],culture:"Famous for Lucknowi Awadhi Dum Biryani, Galouti Kebabs. Known for Kathak classical dance, and Banarasi silk sarees.",fact:"Uttar Pradesh is so large that if it were a separate country, it would be the 5th most populous nation on Earth!"},
+{id:"UK",name:"Uttarakhand",code:"UK",type:"State",capital:"Dehradun",region:"North India",lang:"Hindi, Garhwali, Kumaoni",area:"53,483 kmÂ²",loc:"Located in the northern Himalayas, carved out of Uttar Pradesh in 2000. Bordered by China, Nepal. Called 'Dev Bhoomi' meaning Land of Gods.",attr:["Char Dham â€” Badrinath, Kedarnath, Gangotri, Yamunotri","Haridwar","Rishikesh â€” Yoga Capital of the World","Jim Corbett National Park","Valley of Flowers â€” UNESCO World Heritage"],contrib:["Source of the Ganga and Yamuna rivers","Jim Corbett National Park was India's first national park","Haridwar and Rishikesh are world-leading centres of yoga"],culture:"Famous for Aloo Ke Gutke, Kafuli. Known for Garhwali and Kumaoni folk music.",fact:"Rishikesh is the Yoga Capital of the World. The Beatles visited here in 1968 and composed many songs for the White Album!"},
+{id:"WB",name:"West Bengal",code:"WB",type:"State",capital:"Kolkata",region:"East India",lang:"Bengali, Hindi",area:"88,752 kmÂ²",loc:"Located in eastern India along the Bay of Bengal coast. The Sundarbans mangrove delta is in the south.",attr:["Sundarbans â€” UNESCO World Heritage","Victoria Memorial in Kolkata","Darjeeling â€” famous hill station and Toy Train","Howrah Bridge","Bishnupur"],contrib:["Kolkata served as the capital of British India for over 100 years","Major jute producer","Darjeeling tea is among the world's most expensive"],culture:"Famous for Rosogolla with GI tag, Mishti Doi, Machh-Bhaat. Known for Durga Puja and Rabindra Sangeet.",fact:"Rabindranath Tagore, born in Kolkata, is the only person in history to have written the national anthems of two different countries â€” India and Bangladesh!"},
 // UNION TERRITORIES
-{id:"AN",name:"Andaman and Nicobar Islands",code:"AN",type:"Union Territory",capital:"Port Blair",region:"Bay of Bengal",lang:"Hindi, Bengali, Tamil, Telugu",area:"8,249 km²",loc:"An archipelago of 572 islands in the Bay of Bengal, located far from mainland India.",attr:["Cellular Jail, Port Blair","Radhanagar Beach on Havelock Island","Baratang Island","Ross Island","Neil Island"],contrib:["Strategically critical — India's gateway to the Indo-Pacific","Cellular Jail is a monument to India's freedom fighters","Rich marine biodiversity"],culture:"Famous for fresh seafood including mud crab. Known for ancient tribal heritage.",fact:"The Sentinelese tribe of North Sentinel Island are one of the last truly uncontacted peoples in the world."},
-{id:"CH",name:"Chandigarh",code:"CH",type:"Union Territory",capital:"Chandigarh",region:"North India",lang:"Hindi, Punjabi",area:"114 km²",loc:"A Union Territory that serves as the capital of both Punjab and Haryana simultaneously.",attr:["Rock Garden","Sukhna Lake","Rose Garden","Capitol Complex — UNESCO World Heritage","Sector 17 Plaza"],contrib:["One of India's cleanest, greenest, and best-planned cities","Shared capital of two states — a unique administrative arrangement"],culture:"Famous for Chole Bhature, Amritsari Kulcha. Known for its orderly Sector city layout.",fact:"Chandigarh was designed by the renowned Swiss-French architect Le Corbusier after Partition in 1947."},
-{id:"DN",name:"Dadra, Nagar Haveli and Daman, Diu",code:"DN",type:"Union Territory",capital:"Daman",region:"West India",lang:"Gujarati, Hindi",area:"603 km²",loc:"A merged Union Territory on India's western coast, created in 2020. Comprises non-contiguous enclaves.",attr:["Diu Fort","Naida Caves in Diu","Daman Fort","Silvassa","Vanganga Lake Garden"],contrib:["Formerly Portuguese territories, liberated in 1961","Silvassa is a significant industrial hub","Preserved rare Portuguese colonial architecture"],culture:"Famous for fresh seafood, Bebinca Portuguese layered coconut dessert.",fact:"Along with Goa, Daman and Diu were freed from Portugal in December 1961, 14 years after India's independence!"},
-{id:"DL",name:"Delhi (NCT)",code:"DL",type:"Union Territory",capital:"New Delhi",region:"North India",lang:"Hindi, Punjabi, Urdu",area:"1,484 km²",loc:"India's National Capital Territory. Surrounded by Haryana and Uttar Pradesh. The seat of the Indian government.",attr:["Red Fort","Qutub Minar","India Gate","Lotus Temple","Humayun's Tomb"],contrib:["Capital of India","One of the world's largest cities","India's biggest aviation, railway, and road junction"],culture:"Famous for Butter Chicken, Chole Bhature, and Parathas of Old Delhi's Paranthe Wali Gali.",fact:"Delhi has been the capital of at least 8 major empires and has more UNESCO World Heritage Sites than any other city in India."},
-{id:"JK",name:"Jammu and Kashmir",code:"JK",type:"Union Territory",capital:"Srinagar / Jammu",region:"North India",lang:"Kashmiri, Dogri",area:"42,241 km²",loc:"A Union Territory since October 2019. Located in extreme northern India, bordering Pakistan.",attr:["Dal Lake in Srinagar","Gulmarg","Pahalgam","Vaishno Devi Temple","Mughal Gardens"],contrib:["Kashmir Valley produces over 90% of India's saffron","Pashmina Cashmere wool — the world's finest wool","Kashmiri handmade carpets"],culture:"Famous for Wazwan a 30-course Kashmiri feast, and Kashmiri Kahwa tea. Known for Pashmina weaving.",fact:"Kashmir's Pampore district produces over 90% of India's saffron, making it the world's most expensive spice."},
-{id:"LA",name:"Ladakh",code:"LA",type:"Union Territory",capital:"Leh",region:"North India",lang:"Ladakhi, Hindi",area:"59,146 km²",loc:"India's largest Union Territory by area and one of the world's highest inhabited regions. Bordered by China, Pakistan.",attr:["Pangong Tso Lake","Nubra Valley","Thiksey Monastery","Magnetic Hill in Leh","Khardung La"],contrib:["Strategically critical — borders both China and Pakistan","Unique Tibetan Buddhist culture preserved here"],culture:"Famous for Thukpa noodle soup, Tsampa roasted barley flour, and Butter Tea.",fact:"Ladakh's Siachen Glacier is the world's highest battlefield, where Indian soldiers serve above 6,000 metres!"},
-{id:"LD",name:"Lakshadweep",code:"LD",type:"Union Territory",capital:"Kavaratti",region:"Arabian Sea",lang:"Malayalam",area:"32 km²",loc:"India's smallest Union Territory, consisting of 36 tiny coral islands in the Arabian Sea.",attr:["Agatti Island","Bangaram Atoll","Kadmat Island","Minicoy Island","Pristine coral reefs"],contrib:["Pristine coral reef ecosystem critical for biodiversity","Tuna fishing is the main livelihood"],culture:"Famous for seafood including tuna fish curry. Known for Lava dance.",fact:"Lakshadweep is India's smallest UT — smaller than many towns — but gives India an enormous strategic Exclusive Economic Zone in the sea."},
-{id:"PY",name:"Puducherry",code:"PY",type:"Union Territory",capital:"Puducherry",region:"South India",lang:"Tamil, French",area:"479 km²",loc:"A small Union Territory of four non-contiguous districts. Was the capital of French India until 1954.",attr:["French Quarter White Town","Auroville — experimental township dedicated to human unity","Sri Aurobindo Ashram","Promenade Beach"],contrib:["Unique French colonial heritage","Auroville is a globally recognized centre for sustainable living"],culture:"Famous for French-Tamil fusion cuisine. Known for the French Quarter's unique whitewashed buildings and vibrant café culture.",fact:"Puducherry was a French colony until 1954. It still has French street names and French as an official language!"}
+{id:"AN",name:"Andaman and Nicobar Islands",code:"AN",type:"Union Territory",capital:"Port Blair",region:"Bay of Bengal",lang:"Hindi, Bengali, Tamil, Telugu",area:"8,249 kmÂ²",loc:"An archipelago of 572 islands in the Bay of Bengal, located far from mainland India.",attr:["Cellular Jail, Port Blair","Radhanagar Beach on Havelock Island","Baratang Island","Ross Island","Neil Island"],contrib:["Strategically critical â€” India's gateway to the Indo-Pacific","Cellular Jail is a monument to India's freedom fighters","Rich marine biodiversity"],culture:"Famous for fresh seafood including mud crab. Known for ancient tribal heritage.",fact:"The Sentinelese tribe of North Sentinel Island are one of the last truly uncontacted peoples in the world."},
+{id:"CH",name:"Chandigarh",code:"CH",type:"Union Territory",capital:"Chandigarh",region:"North India",lang:"Hindi, Punjabi",area:"114 kmÂ²",loc:"A Union Territory that serves as the capital of both Punjab and Haryana simultaneously.",attr:["Rock Garden","Sukhna Lake","Rose Garden","Capitol Complex â€” UNESCO World Heritage","Sector 17 Plaza"],contrib:["One of India's cleanest, greenest, and best-planned cities","Shared capital of two states â€” a unique administrative arrangement"],culture:"Famous for Chole Bhature, Amritsari Kulcha. Known for its orderly Sector city layout.",fact:"Chandigarh was designed by the renowned Swiss-French architect Le Corbusier after Partition in 1947."},
+{id:"DN",name:"Dadra, Nagar Haveli and Daman, Diu",code:"DN",type:"Union Territory",capital:"Daman",region:"West India",lang:"Gujarati, Hindi",area:"603 kmÂ²",loc:"A merged Union Territory on India's western coast, created in 2020. Comprises non-contiguous enclaves.",attr:["Diu Fort","Naida Caves in Diu","Daman Fort","Silvassa","Vanganga Lake Garden"],contrib:["Formerly Portuguese territories, liberated in 1961","Silvassa is a significant industrial hub","Preserved rare Portuguese colonial architecture"],culture:"Famous for fresh seafood, Bebinca Portuguese layered coconut dessert.",fact:"Along with Goa, Daman and Diu were freed from Portugal in December 1961, 14 years after India's independence!"},
+{id:"DL",name:"Delhi (NCT)",code:"DL",type:"Union Territory",capital:"New Delhi",region:"North India",lang:"Hindi, Punjabi, Urdu",area:"1,484 kmÂ²",loc:"India's National Capital Territory. Surrounded by Haryana and Uttar Pradesh. The seat of the Indian government.",attr:["Red Fort","Qutub Minar","India Gate","Lotus Temple","Humayun's Tomb"],contrib:["Capital of India","One of the world's largest cities","India's biggest aviation, railway, and road junction"],culture:"Famous for Butter Chicken, Chole Bhature, and Parathas of Old Delhi's Paranthe Wali Gali.",fact:"Delhi has been the capital of at least 8 major empires and has more UNESCO World Heritage Sites than any other city in India."},
+{id:"JK",name:"Jammu and Kashmir",code:"JK",type:"Union Territory",capital:"Srinagar / Jammu",region:"North India",lang:"Kashmiri, Dogri",area:"42,241 kmÂ²",loc:"A Union Territory since October 2019. Located in extreme northern India, bordering Pakistan.",attr:["Dal Lake in Srinagar","Gulmarg","Pahalgam","Vaishno Devi Temple","Mughal Gardens"],contrib:["Kashmir Valley produces over 90% of India's saffron","Pashmina Cashmere wool â€” the world's finest wool","Kashmiri handmade carpets"],culture:"Famous for Wazwan a 30-course Kashmiri feast, and Kashmiri Kahwa tea. Known for Pashmina weaving.",fact:"Kashmir's Pampore district produces over 90% of India's saffron, making it the world's most expensive spice."},
+{id:"LA",name:"Ladakh",code:"LA",type:"Union Territory",capital:"Leh",region:"North India",lang:"Ladakhi, Hindi",area:"59,146 kmÂ²",loc:"India's largest Union Territory by area and one of the world's highest inhabited regions. Bordered by China, Pakistan.",attr:["Pangong Tso Lake","Nubra Valley","Thiksey Monastery","Magnetic Hill in Leh","Khardung La"],contrib:["Strategically critical â€” borders both China and Pakistan","Unique Tibetan Buddhist culture preserved here"],culture:"Famous for Thukpa noodle soup, Tsampa roasted barley flour, and Butter Tea.",fact:"Ladakh's Siachen Glacier is the world's highest battlefield, where Indian soldiers serve above 6,000 metres!"},
+{id:"LD",name:"Lakshadweep",code:"LD",type:"Union Territory",capital:"Kavaratti",region:"Arabian Sea",lang:"Malayalam",area:"32 kmÂ²",loc:"India's smallest Union Territory, consisting of 36 tiny coral islands in the Arabian Sea.",attr:["Agatti Island","Bangaram Atoll","Kadmat Island","Minicoy Island","Pristine coral reefs"],contrib:["Pristine coral reef ecosystem critical for biodiversity","Tuna fishing is the main livelihood"],culture:"Famous for seafood including tuna fish curry. Known for Lava dance.",fact:"Lakshadweep is India's smallest UT â€” smaller than many towns â€” but gives India an enormous strategic Exclusive Economic Zone in the sea."},
+{id:"PY",name:"Puducherry",code:"PY",type:"Union Territory",capital:"Puducherry",region:"South India",lang:"Tamil, French",area:"479 kmÂ²",loc:"A small Union Territory of four non-contiguous districts. Was the capital of French India until 1954.",attr:["French Quarter White Town","Auroville â€” experimental township dedicated to human unity","Sri Aurobindo Ashram","Promenade Beach"],contrib:["Unique French colonial heritage","Auroville is a globally recognized centre for sustainable living"],culture:"Famous for French-Tamil fusion cuisine. Known for the French Quarter's unique whitewashed buildings and vibrant cafÃ© culture.",fact:"Puducherry was a French colony until 1954. It still has French street names and French as an official language!"}
 ];
 
-// ─── GLOBALS ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ GLOBALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let currentState=null, typedKeys="", keyTimer=null;
 let ttsEnabled=false, ttsUtterance=null, ttsActive=false;
+let virtualCursor={x:500,y:500};
+const stateCentroids={};
 const byId=id=>document.getElementById(id);
 const stateMap=Object.fromEntries(STATES.map(s=>[s.id,s]));
 const stateIds=STATES.map(s=>s.id);
@@ -772,7 +775,7 @@ const normMap = {
     "lakshadweep": "LD", "puducherry": "PY", "pondicherry": "PY"
 };
 
-// ─── D3.JS MAP RENDERER ──────────────────────────────────────────────────────
+// â”€â”€â”€ D3.JS MAP RENDERER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function initHighFidelityMap() {
     try {
         // Fetch an open-source, highly accurate India geojson using D3
@@ -817,6 +820,7 @@ async function initHighFidelityMap() {
                 if (!isNaN(centroid[0]) && !isNaN(centroid[1])) {
                     let cx = centroid[0];
                     let cy = centroid[1];
+                    stateCentroids[stId] = { x: cx, y: cy };
                     // Manual label tweaks for visual clarity on crowded clusters
                     if (stId === "KL") cx -= 15;
                     if (stId === "TR") cy += 10;
@@ -839,12 +843,12 @@ async function initHighFidelityMap() {
 
     } catch (error) {
         console.error("Map rendering failed:", error);
-        byId("loading-indicator").innerHTML = "⚠️ Could not connect to geographical data provider.<br>Please check your internet connection.";
+        byId("loading-indicator").innerHTML = "âš ï¸ Could not connect to geographical data provider.<br>Please check your internet connection.";
     }
 }
 
 
-// ─── TTS ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ TTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function getTTSText(s){
   const attrStr=s.attr.map((a,i)=>`${i+1}. ${a}`).join('. ');
   const contribStr=s.contrib.join('. ');
@@ -862,12 +866,12 @@ function speakText(text, label){
   byId('tts-bar').classList.add('visible');
   byId('tts-reading-text').textContent='Reading: '+label;
   byId('tts-read-btn').classList.add('reading');
-  byId('tts-read-btn').textContent='⏹ Stop';
+  byId('tts-read-btn').textContent='â¹ Stop';
   u.onend=u.onerror=()=>{
     ttsActive=false;
     byId('tts-bar').classList.remove('visible');
     byId('tts-read-btn').classList.remove('reading');
-    byId('tts-read-btn').textContent='🔊 Read Aloud';
+    byId('tts-read-btn').textContent='ðŸ”Š Read Aloud';
   };
   speechSynthesis.speak(u);
 }
@@ -876,7 +880,7 @@ function stopTTS(){
   if('speechSynthesis' in window) speechSynthesis.cancel();
   ttsActive=false;
   byId('tts-bar').classList.remove('visible');
-  if(byId('tts-read-btn')){byId('tts-read-btn').classList.remove('reading');byId('tts-read-btn').textContent='🔊 Read Aloud';}
+  if(byId('tts-read-btn')){byId('tts-read-btn').classList.remove('reading');byId('tts-read-btn').textContent='ðŸ”Š Read Aloud';}
 }
 
 function toggleTTS(){
@@ -893,7 +897,7 @@ function readStateAloud(){
   speakText(getTTSText(s),s.name);
 }
 
-// ─── PANEL ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildPanel(){
   const states=STATES.filter(s=>s.type==="State").sort((a,b)=>a.name.localeCompare(b.name));
   const uts=STATES.filter(s=>s.type==="Union Territory").sort((a,b)=>a.name.localeCompare(b.name));
@@ -912,8 +916,8 @@ function buildPanel(){
   byId("panel-inner").innerHTML=h;
 }
 
-// ─── MAP HIGHLIGHT ────────────────────────────────────────────────────────────
-window.activate = function(id) { // Attached to window to play nice with dynamically injected D3 SVGs
+// â”€â”€â”€ MAP HIGHLIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+window.activate = function(id, customSpeechText) { // Attached to window to play nice with dynamically injected D3 SVGs
   const s=stateMap[id];
   if(!s)return;
   if(currentState){
@@ -925,6 +929,19 @@ window.activate = function(id) { // Attached to window to play nice with dynamic
     byId("p-"+st.id)?.classList.toggle("dim", st.id!==id);
     byId("l-"+st.id)?.classList.toggle("dim", st.id!==id);
   });
+  
+  // Warp virtual cursor to centroid
+  const centroid = stateCentroids[id];
+  if (centroid) {
+    virtualCursor.x = centroid.x;
+    virtualCursor.y = centroid.y;
+    const vCursor = byId("virtual-cursor");
+    if (vCursor) {
+      vCursor.setAttribute("cx", virtualCursor.x);
+      vCursor.setAttribute("cy", virtualCursor.y);
+      vCursor.style.display = "block";
+    }
+  }
   
   // Apply Lit States robustly
   const targetPath = d3.select("#p-" + id).node();
@@ -940,13 +957,16 @@ window.activate = function(id) { // Attached to window to play nice with dynamic
   byId("si-"+id)?.classList.add("active");
   byId("si-"+id)?.scrollIntoView({block:"nearest",behavior:"smooth"});
   currentState=id;
-  byId("status").innerHTML=`<b>${s.name}</b> selected — press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for full details`;
+  byId("status").innerHTML=`<b>${s.name}</b> selected â€” press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for full details`;
+  
+  const textToSpeak = customSpeechText || `${s.name}. ${s.type}. Capital: ${s.capital}. Located in ${s.region}. ${s.loc}`;
+  const textToAnnounce = customSpeechText || `${s.name} highlighted. Press Enter for details.`;
   
   if(ttsEnabled){
     stopTTS();
-    speakText(`${s.name}. ${s.type}. Capital: ${s.capital}. Located in ${s.region}. ${s.loc}`,s.name);
+    speakText(textToSpeak, s.name);
   } else {
-    announce(`${s.name} highlighted. Press Enter for details.`);
+    announce(textToAnnounce);
   }
 };
 
@@ -960,14 +980,15 @@ function clearAll(){
     byId("p-"+st.id)?.classList.remove("dim");
     byId("l-"+st.id)?.classList.remove("dim");
   });
+  byId("virtual-cursor")?.style.setProperty("display", "none");
   currentState=null; typedKeys=""; updateKD("");
-  byId("status").innerHTML='Click any state or type a shortcut — e.g. <b>KL</b> Kerala &nbsp;·&nbsp; <b>UP</b> Uttar Pradesh &nbsp;·&nbsp; <b>MH</b> Maharashtra';
+  byId("status").innerHTML='Click any state or type a shortcut â€” e.g. <b>KL</b> Kerala &nbsp;Â·&nbsp; <b>UP</b> Uttar Pradesh &nbsp;Â·&nbsp; <b>MH</b> Maharashtra';
   stopTTS();
   announce("Selection cleared.");
 }
 
-// ─── POPUP ────────────────────────────────────────────────────────────────────
-function showPopup(id){
+// â”€â”€â”€ POPUP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function showPopup(id, preventFullRead){
   const s=stateMap[id];
   if(!s)return;
   byId("pop-name").textContent=s.name;
@@ -987,7 +1008,7 @@ function showPopup(id){
   byId("popup").classList.add("show");
   byId("overlay").classList.add("show");
   byId("pop-close").focus();
-  if(ttsEnabled){
+  if(ttsEnabled && !preventFullRead){
     setTimeout(()=>speakText(getTTSText(s),s.name),400);
   }
 }
@@ -998,12 +1019,92 @@ function hidePopup(){
   stopTTS();
 }
 
-function navState(dir){
-  const i=stateIds.indexOf(currentState);
-  if(i===-1)return;
-  const ni=(i+dir+stateIds.length)%stateIds.length;
-  activate(stateIds[ni]);
-  showPopup(stateIds[ni]);
+function navigateGeographically(direction) {
+  let dx = 0, dy = 0;
+  const step = 15; // Move by 15 SVG coordinates per press
+  
+  if (direction === "up") dy = -step;
+  if (direction === "down") dy = step;
+  if (direction === "left") dx = -step;
+  if (direction === "right") dx = step;
+  
+  const oldX = virtualCursor.x;
+  const oldY = virtualCursor.y;
+  
+  // Calculate new coordinates with bounding box safety
+  let newX = oldX + dx;
+  let newY = oldY + dy;
+  
+  // Bounding box bounds (viewBox is 0 0 1000 1000)
+  newX = Math.max(50, Math.min(950, newX));
+  newY = Math.max(50, Math.min(950, newY));
+  
+  virtualCursor.x = newX;
+  virtualCursor.y = newY;
+  
+  // Update visual cursor position
+  const vCursor = byId("virtual-cursor");
+  if (vCursor) {
+    vCursor.setAttribute("cx", newX);
+    vCursor.setAttribute("cy", newY);
+    vCursor.style.display = "block";
+  }
+  
+  // Determine if we are inside a state
+  const svg = byId("map-svg");
+  let foundStateId = null;
+  
+  if (svg) {
+    const point = svg.createSVGPoint();
+    point.x = newX;
+    point.y = newY;
+    
+    // Check state paths
+    for (let st of STATES) {
+      const pathEl = byId("p-" + st.id);
+      if (pathEl && pathEl.isPointInFill(point)) {
+        foundStateId = st.id;
+        break;
+      }
+    }
+  }
+  
+  // Handle state transition
+  const prevStateId = currentState;
+  if (foundStateId !== prevStateId) {
+    if (foundStateId) {
+      // Transitioned into a new state!
+      const prevStateName = prevStateId ? stateMap[prevStateId].name : "Outside borders";
+      const nextStateName = stateMap[foundStateId].name;
+      
+      const dirWords = {
+        "up": "to the north",
+        "down": "to the south",
+        "left": "to the west",
+        "right": "to the east"
+      };
+      
+      const relDir = dirWords[direction];
+      const transitionText = prevStateId 
+        ? `${nextStateName}, ${relDir} of ${prevStateName}` 
+        : `${nextStateName}`;
+      
+      // Highlight the new state and announce the transition
+      window.activate(foundStateId, transitionText);
+      
+      // Update details popup if it is open
+      if (byId("popup").classList.contains("show")) {
+        showPopup(foundStateId, true); // preventFullRead = true
+      }
+    } else {
+      // Transitioned into water/outside state borders!
+      clearAll();
+      announce("Outside state borders.");
+      if (byId("popup").classList.contains("show")) {
+        hidePopup();
+      }
+    }
+  }
 }
 
 function announce(t){
@@ -1018,12 +1119,15 @@ function updateKD(t){
   el.classList.toggle("show",t.length>0);
 }
 
-// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ KEYBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.addEventListener("keydown",e=>{
+  if (e.key === "ArrowUp") { e.preventDefault(); navigateGeographically("up"); return; }
+  if (e.key === "ArrowDown") { e.preventDefault(); navigateGeographically("down"); return; }
+  if (e.key === "ArrowLeft") { e.preventDefault(); navigateGeographically("left"); return; }
+  if (e.key === "ArrowRight") { e.preventDefault(); navigateGeographically("right"); return; }
+
   if(byId("popup").classList.contains("show")){
     if(e.key==="Escape"){hidePopup();return;}
-    if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();navState(1);return;}
-    if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();navState(-1);return;}
     if(e.key===" "){e.preventDefault();readStateAloud();return;}
     return;
   }
@@ -1041,7 +1145,7 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-// ─── PANEL TOGGLE ────────────────────────────────────────────────────────────
+// â”€â”€â”€ PANEL TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const tog=byId("panel-toggle");
 tog.addEventListener("click",()=>{
   const inner=byId("panel-inner");
@@ -1054,7 +1158,7 @@ tog.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDef
 byId("pop-close").addEventListener("click",hidePopup);
 byId("overlay").addEventListener("click",hidePopup);
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 buildPanel();
 initHighFidelityMap(); 
 </script>
