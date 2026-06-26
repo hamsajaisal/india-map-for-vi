@@ -760,6 +760,8 @@ let currentState=null, typedKeys="", keyTimer=null;
 let ttsEnabled=false, ttsUtterance=null, ttsActive=false;
 let virtualCursor={x:500,y:500};
 let soundEnabled=false;
+let lastAreaName="";
+let audioCtx=null;
 const stateCentroids={};
 const byId=id=>document.getElementById(id);
 const stateMap=Object.fromEntries(STATES.map(s=>[s.id,s]));
@@ -905,16 +907,21 @@ function toggleSound(){
 
 function playTick(){
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
     osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(150, ctx.currentTime);
-    gain.gain.setValueAtTime(0.015, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
     osc.start();
-    osc.stop(ctx.currentTime + 0.04);
+    osc.stop(audioCtx.currentTime + 0.04);
   } catch(e) {
     console.error("Audio failed:", e);
   }
@@ -987,6 +994,7 @@ window.activate = function(id, customSpeechText) { // Attached to window to play
   byId("si-"+id)?.classList.add("active");
   byId("si-"+id)?.scrollIntoView({block:"nearest",behavior:"smooth"});
   currentState=id;
+  lastAreaName=s.name;
   byId("status").innerHTML=`<b>${s.name}</b> selected â€” press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for full details`;
   
   const textToSpeak = customSpeechText || `${s.name}. ${s.type}. Capital: ${s.capital}. Located in ${s.region}. ${s.loc}`;
@@ -1011,7 +1019,10 @@ function clearAll(){
     byId("l-"+st.id)?.classList.remove("dim");
   });
   byId("virtual-cursor")?.style.setProperty("display", "none");
-  currentState=null; typedKeys=""; updateKD("");
+  currentState=null;
+  lastAreaName="";
+  typedKeys="";
+  updateKD("");
   byId("status").innerHTML='Click any state or type a shortcut â€” e.g. <b>KL</b> Kerala &nbsp;Â·&nbsp; <b>UP</b> Uttar Pradesh &nbsp;Â·&nbsp; <b>MH</b> Maharashtra';
   stopTTS();
   announce("Selection cleared.");
@@ -1103,42 +1114,113 @@ function navigateGeographically(direction) {
     }
   }
   
-  // Handle state transition
   const prevStateId = currentState;
-  if (foundStateId !== prevStateId) {
+  
+  // Determine what area we are currently in
+  let currentAreaName = "";
+  if (foundStateId) {
+    currentAreaName = stateMap[foundStateId].name;
+  } else {
+    currentAreaName = getBorderDescription(prevStateId, direction);
+  }
+  
+  // If we changed area (state-to-state, state-to-border, border-to-state, or border-to-border)
+  if (currentAreaName !== lastAreaName) {
+    const dirWords = {
+      "up": "to the north",
+      "down": "to the south",
+      "left": "to the west",
+      "right": "to the east"
+    };
+    const relDir = dirWords[direction];
+    
+    // Construct relative transition announcement
+    let transitionText = currentAreaName;
+    if (lastAreaName) {
+      transitionText = `${currentAreaName}, ${relDir} of ${lastAreaName}`;
+    }
+    
     if (foundStateId) {
-      // Transitioned into a new state!
-      const prevStateName = prevStateId ? stateMap[prevStateId].name : "Outside borders";
-      const nextStateName = stateMap[foundStateId].name;
-      
-      const dirWords = {
-        "up": "to the north",
-        "down": "to the south",
-        "left": "to the west",
-        "right": "to the east"
-      };
-      
-      const relDir = dirWords[direction];
-      const transitionText = prevStateId 
-        ? `${nextStateName}, ${relDir} of ${prevStateName}` 
-        : `${nextStateName}`;
-      
-      // Highlight the new state and announce the transition
+      // Entered a state! Highlight it.
       window.activate(foundStateId, transitionText);
-      
-      // Update details popup if it is open
       if (byId("popup").classList.contains("show")) {
-        showPopup(foundStateId, true); // preventFullRead = true
+        showPopup(foundStateId, true);
       }
     } else {
-      // Transitioned into water/outside state borders!
-      clearAll();
-      announce("Outside state borders.");
+      // Entered a border/sea! Clear highlights.
+      clearAllStateHighlights();
+      currentState = null;
+      announce(transitionText);
+      if (ttsEnabled) {
+        stopTTS();
+        speakText(transitionText, "Border");
+      }
       if (byId("popup").classList.contains("show")) {
         hidePopup();
       }
     }
+    
+    lastAreaName = currentAreaName;
   }
+}
+
+function clearAllStateHighlights() {
+  if(currentState){
+    byId("p-"+currentState)?.classList.remove("lit");
+    byId("l-"+currentState)?.classList.remove("lit");
+    byId("si-"+currentState)?.classList.remove("active");
+  }
+  STATES.forEach(st=>{
+    byId("p-"+st.id)?.classList.remove("dim");
+    byId("l-"+st.id)?.classList.remove("dim");
+  });
+}
+
+function getBorderDescription(lastStateId, direction) {
+  if (!lastStateId) {
+    if (direction === "up") return "Northern region";
+    if (direction === "down") return "Southern region";
+    if (direction === "left") return "Western region";
+    if (direction === "right") return "Eastern region";
+    return "Outside borders";
+  }
+  
+  const westCoast = ["GJ", "MH", "GA", "KA", "KL", "LD"];
+  const eastCoast = ["TN", "AP", "OD", "WB", "AN"];
+  const northBorder = ["JK", "LA", "HP", "UK", "SK", "AR"];
+  const westBorder = ["GJ", "RJ", "PB", "JK"];
+  const eastBorder = ["AR", "NL", "MN", "MZ", "TR", "ML", "AS"];
+  const southTip = ["TN", "KL"];
+  
+  if (westCoast.includes(lastStateId) && direction === "left") {
+    return "Arabian Sea";
+  }
+  if (eastCoast.includes(lastStateId) && direction === "right") {
+    return "Bay of Bengal";
+  }
+  if (lastStateId === "WB" && (direction === "down" || direction === "right")) {
+    return "Bay of Bengal";
+  }
+  if (southTip.includes(lastStateId) && direction === "down") {
+    return "Indian Ocean";
+  }
+  if (northBorder.includes(lastStateId) && direction === "up") {
+    return "Northern international border";
+  }
+  if (westBorder.includes(lastStateId) && direction === "left") {
+    return "Western international border with Pakistan";
+  }
+  if (eastBorder.includes(lastStateId) && direction === "right") {
+    return "Eastern international border";
+  }
+  
+  const dirWords = {
+    "up": "Northern border",
+    "down": "Southern border",
+    "left": "Western border",
+    "right": "Eastern border"
+  };
+  return dirWords[direction] || "Outside state borders";
 }
 
 function announce(t){
