@@ -927,6 +927,42 @@ function playTick(){
   }
 }
 
+function playBorderSound() {
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const now = audioCtx.currentTime;
+    
+    // First tick (slightly lower pitch)
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.frequency.setValueAtTime(450, now);
+    gain1.gain.setValueAtTime(0.08, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    osc1.start(now);
+    osc1.stop(now + 0.06);
+    
+    // Second tick (higher pitch, delayed by 50ms)
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.frequency.setValueAtTime(800, now + 0.05);
+    gain2.gain.setValueAtTime(0.08, now + 0.05);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+    osc2.start(now + 0.05);
+    osc2.stop(now + 0.11);
+  } catch(e) {
+    console.error("Border audio failed:", e);
+  }
+}
+
 function readStateAloud(){
   if(!currentState)return;
   const s=stateMap[currentState];
@@ -1088,10 +1124,6 @@ function navigateGeographically(direction) {
   newX = Math.max(50, Math.min(950, newX));
   newY = Math.max(50, Math.min(950, newY));
   
-  if ((newX !== oldX || newY !== oldY) && soundEnabled) {
-    playTick();
-  }
-  
   virtualCursor.x = newX;
   virtualCursor.y = newY;
   
@@ -1130,8 +1162,19 @@ function navigateGeographically(direction) {
     currentAreaName = getBorderDescription(newX, newY);
   }
   
+  const moved = (newX !== oldX || newY !== oldY);
+  const isBorderTransition = (currentAreaName !== lastAreaName);
+  
+  if (moved && soundEnabled) {
+    if (isBorderTransition) {
+      playBorderSound();
+    } else {
+      playTick();
+    }
+  }
+  
   // If we changed area (state-to-state, state-to-border, border-to-state, or border-to-border)
-  if (currentAreaName !== lastAreaName) {
+  if (isBorderTransition) {
     const dirWords = {
       "up": "to the north",
       "down": "to the south",
