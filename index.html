@@ -566,7 +566,7 @@ body{
 </style>
 </head>
 <body>
-<div id="live" aria-live="polite" aria-atomic="true"></div>
+<div id="live" aria-live="assertive" aria-atomic="true"></div>
 
 <header id="header">
   <div>
@@ -593,8 +593,8 @@ body{
     <div id="panel-inner"></div>
   </nav>
 
-  <main id="map-area" tabindex="0" aria-label="India political map">
-    <div id="status" role="status" aria-live="polite">Click any state or type a shortcut â€” e.g. <b>KL</b> Kerala &nbsp;Â·&nbsp; <b>UP</b> Uttar Pradesh</div>
+  <main id="map-area" tabindex="0" role="application" aria-label="India political map">
+    <div id="status">Click any state or type a shortcut â€” e.g. <b>KL</b> Kerala &nbsp;Â·&nbsp; <b>UP</b> Uttar Pradesh</div>
     
     <div id="map-wrap">
       <div id="loading-indicator">
@@ -917,11 +917,11 @@ function playTick(){
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.04);
+    osc.stop(audioCtx.currentTime + 0.08);
   } catch(e) {
     console.error("Audio failed:", e);
   }
@@ -995,7 +995,15 @@ window.activate = function(id, customSpeechText) { // Attached to window to play
   byId("si-"+id)?.scrollIntoView({block:"nearest",behavior:"smooth"});
   currentState=id;
   lastAreaName=s.name;
-  byId("status").innerHTML=`<b>${s.name}</b> selected â€” press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for full details`;
+  
+  const transitionInfo = (customSpeechText && customSpeechText.includes("to the")) 
+    ? customSpeechText.substring(s.name.length + 2) 
+    : "";
+  const statusHtml = transitionInfo 
+    ? `<b>${s.name}</b> selected (${transitionInfo}) — press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for details`
+    : `<b>${s.name}</b> selected — press <kbd style="background:#1a2a0a;border:1px solid #4a7a3a;border-radius:3px;padding:1px 5px;color:#8ac860;font-size:.62rem">Enter</kbd> for details`;
+    
+  byId("status").innerHTML = statusHtml;
   
   const textToSpeak = customSpeechText || `${s.name}. ${s.type}. Capital: ${s.capital}. Located in ${s.region}. ${s.loc}`;
   const textToAnnounce = customSpeechText || `${s.name} highlighted. Press Enter for details.`;
@@ -1114,14 +1122,12 @@ function navigateGeographically(direction) {
     }
   }
   
-  const prevStateId = currentState;
-  
   // Determine what area we are currently in
   let currentAreaName = "";
   if (foundStateId) {
     currentAreaName = stateMap[foundStateId].name;
   } else {
-    currentAreaName = getBorderDescription(prevStateId, direction);
+    currentAreaName = getBorderDescription(newX, newY);
   }
   
   // If we changed area (state-to-state, state-to-border, border-to-state, or border-to-border)
@@ -1137,7 +1143,15 @@ function navigateGeographically(direction) {
     // Construct relative transition announcement
     let transitionText = currentAreaName;
     if (lastAreaName) {
-      transitionText = `${currentAreaName}, ${relDir} of ${lastAreaName}`;
+      if (foundStateId) {
+        // Entered a state
+        const lastBaseName = lastAreaName.includes(",") ? lastAreaName.split(",")[0] : lastAreaName;
+        transitionText = `${currentAreaName}, ${relDir} of ${lastBaseName}`;
+      } else {
+        // Entered a border/sea
+        // currentAreaName already is descriptive, e.g. "Arabian Sea, to the west of Kerala"
+        transitionText = currentAreaName;
+      }
     }
     
     if (foundStateId) {
@@ -1150,6 +1164,7 @@ function navigateGeographically(direction) {
       // Entered a border/sea! Clear highlights.
       clearAllStateHighlights();
       currentState = null;
+      byId("status").innerHTML = `<b>${transitionText}</b>`;
       announce(transitionText);
       if (ttsEnabled) {
         stopTTS();
@@ -1176,14 +1191,36 @@ function clearAllStateHighlights() {
   });
 }
 
-function getBorderDescription(lastStateId, direction) {
-  if (!lastStateId) {
-    if (direction === "up") return "Northern region";
-    if (direction === "down") return "Southern region";
-    if (direction === "left") return "Western region";
-    if (direction === "right") return "Eastern region";
-    return "Outside borders";
+function getBorderDescription(x, y) {
+  let minD = Infinity;
+  let nearestId = null;
+  for (let id in stateCentroids) {
+    const c = stateCentroids[id];
+    const d = Math.hypot(x - c.x, y - c.y);
+    if (d < minD) {
+      minD = d;
+      nearestId = id;
+    }
   }
+  
+  if (!nearestId) {
+    return "Outside state borders";
+  }
+  
+  const c = stateCentroids[nearestId];
+  const dx = x - c.x;
+  const dy = y - c.y;
+  const angle = Math.atan2(dy, dx) * 180 / Math.PI; // -180 to 180
+  
+  let dir = "";
+  if (angle >= -22.5 && angle < 22.5) dir = "east";
+  else if (angle >= 22.5 && angle < 67.5) dir = "southeast";
+  else if (angle >= 67.5 && angle < 112.5) dir = "south";
+  else if (angle >= 112.5 && angle < 157.5) dir = "southwest";
+  else if (angle >= 157.5 || angle < -157.5) dir = "west";
+  else if (angle >= -157.5 && angle < -112.5) dir = "northwest";
+  else if (angle >= -112.5 && angle < -67.5) dir = "north";
+  else if (angle >= -67.5 && angle < -22.5) dir = "northeast";
   
   const westCoast = ["GJ", "MH", "GA", "KA", "KL", "LD"];
   const eastCoast = ["TN", "AP", "OD", "WB", "AN"];
@@ -1192,35 +1229,33 @@ function getBorderDescription(lastStateId, direction) {
   const eastBorder = ["AR", "NL", "MN", "MZ", "TR", "ML", "AS"];
   const southTip = ["TN", "KL"];
   
-  if (westCoast.includes(lastStateId) && direction === "left") {
-    return "Arabian Sea";
-  }
-  if (eastCoast.includes(lastStateId) && direction === "right") {
-    return "Bay of Bengal";
-  }
-  if (lastStateId === "WB" && (direction === "down" || direction === "right")) {
-    return "Bay of Bengal";
-  }
-  if (southTip.includes(lastStateId) && direction === "down") {
-    return "Indian Ocean";
-  }
-  if (northBorder.includes(lastStateId) && direction === "up") {
-    return "Northern international border";
-  }
-  if (westBorder.includes(lastStateId) && direction === "left") {
-    return "Western international border with Pakistan";
-  }
-  if (eastBorder.includes(lastStateId) && direction === "right") {
-    return "Eastern international border";
+  let borderName = "";
+  if (dir.includes("west") && westCoast.includes(nearestId)) {
+    borderName = "Arabian Sea";
+  } else if (dir.includes("east") && eastCoast.includes(nearestId)) {
+    borderName = "Bay of Bengal";
+  } else if (dir.includes("south") && southTip.includes(nearestId)) {
+    borderName = "Indian Ocean";
+  } else if (dir.includes("north") && northBorder.includes(nearestId)) {
+    borderName = "Northern international border";
+  } else if (dir.includes("west") && westBorder.includes(nearestId)) {
+    borderName = "Western international border with Pakistan";
+  } else if (dir.includes("east") && eastBorder.includes(nearestId)) {
+    borderName = "Eastern international border";
+  } else if (y > 850) {
+    borderName = "Indian Ocean";
+  } else if (x < 150) {
+    borderName = "Western border";
+  } else if (x > 850) {
+    borderName = "Eastern border";
+  } else if (y < 150) {
+    borderName = "Northern border";
+  } else {
+    borderName = "Border";
   }
   
-  const dirWords = {
-    "up": "Northern border",
-    "down": "Southern border",
-    "left": "Western border",
-    "right": "Eastern border"
-  };
-  return dirWords[direction] || "Outside state borders";
+  const stateName = stateMap[nearestId].name;
+  return `${borderName}, to the ${dir} of ${stateName}`;
 }
 
 function announce(t){
