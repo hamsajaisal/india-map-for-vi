@@ -927,7 +927,30 @@ function playTick(){
   }
 }
 
-function playBorderSound() {
+function playBoundaryTick(){
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    // Lower, deeper tone for sea/boundary movement (300 Hz)
+    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+  } catch(e) {
+    console.error("Audio failed:", e);
+  }
+}
+
+function playNationalBoundaryCrossSound() {
   try {
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -937,7 +960,8 @@ function playBorderSound() {
     }
     const now = audioCtx.currentTime;
     
-    // First tick (slightly lower pitch)
+    // Double-tone chime
+    // Tone 1 (450 Hz)
     const osc1 = audioCtx.createOscillator();
     const gain1 = audioCtx.createGain();
     osc1.connect(gain1);
@@ -948,7 +972,7 @@ function playBorderSound() {
     osc1.start(now);
     osc1.stop(now + 0.06);
     
-    // Second tick (higher pitch, delayed by 50ms)
+    // Tone 2 (800 Hz) starting slightly later
     const osc2 = audioCtx.createOscillator();
     const gain2 = audioCtx.createGain();
     osc2.connect(gain2);
@@ -959,7 +983,7 @@ function playBorderSound() {
     osc2.start(now + 0.05);
     osc2.stop(now + 0.11);
   } catch(e) {
-    console.error("Border audio failed:", e);
+    console.error("Boundary cross audio failed:", e);
   }
 }
 
@@ -1166,10 +1190,16 @@ function navigateGeographically(direction) {
   const isBorderTransition = (currentAreaName !== lastAreaName);
   
   if (moved && soundEnabled) {
-    if (isBorderTransition) {
-      playBorderSound();
+    const wasInState = (currentState !== null);
+    const isInState = (foundStateId !== null);
+    const crossedNationalBoundary = (wasInState !== isInState);
+    
+    if (crossedNationalBoundary) {
+      playNationalBoundaryCrossSound();
+    } else if (isInState) {
+      playTick(); // Inside India (state movement)
     } else {
-      playTick();
+      playBoundaryTick(); // Outside India (sea/international border movement)
     }
   }
   
