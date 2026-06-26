@@ -99,6 +99,7 @@ body{
 }
 .tts-btn:hover{background:rgba(212,168,67,.22);}
 .tts-btn.speaking{background:rgba(192,57,43,.2);border-color:var(--accent);color:#e07060;animation:pulse-btn 1.2s infinite;}
+.tts-btn.active{background:rgba(42,128,128,.15);border-color:var(--teal-light);color:#4aa090;}
 @keyframes pulse-btn{0%,100%{opacity:1}50%{opacity:.6}}
 .hint-chip{
   font-family:'JetBrains Mono',monospace;
@@ -577,6 +578,9 @@ body{
     <button class="tts-btn" id="tts-toggle" onclick="toggleTTS()" title="Toggle text-to-speech auto-read">
       <span id="tts-icon">ðŸ”Š</span> <span id="tts-label">TTS: OFF</span>
     </button>
+    <button class="tts-btn" id="sound-toggle" onclick="toggleSound()" title="Toggle navigation tick sound">
+      <span id="sound-icon">🔈</span> <span id="sound-label">SOUND: OFF</span>
+    </button>
   </div>
 </header>
 
@@ -755,6 +759,7 @@ const STATES=[
 let currentState=null, typedKeys="", keyTimer=null;
 let ttsEnabled=false, ttsUtterance=null, ttsActive=false;
 let virtualCursor={x:500,y:500};
+let soundEnabled=false;
 const stateCentroids={};
 const byId=id=>document.getElementById(id);
 const stateMap=Object.fromEntries(STATES.map(s=>[s.id,s]));
@@ -888,6 +893,31 @@ function toggleTTS(){
   byId('tts-label').textContent=ttsEnabled?'TTS: ON':'TTS: OFF';
   byId('tts-toggle').classList.toggle('speaking',ttsEnabled);
   if(!ttsEnabled) stopTTS();
+}
+
+function toggleSound(){
+  soundEnabled=!soundEnabled;
+  byId('sound-label').textContent=soundEnabled?'SOUND: ON':'SOUND: OFF';
+  byId('sound-icon').textContent=soundEnabled?'🔊':'🔈';
+  byId('sound-toggle').classList.toggle('active',soundEnabled);
+  if(soundEnabled) playTick();
+}
+
+function playTick(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(150, ctx.currentTime);
+    gain.gain.setValueAtTime(0.015, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.04);
+  } catch(e) {
+    console.error("Audio failed:", e);
+  }
 }
 
 function readStateAloud(){
@@ -1038,6 +1068,10 @@ function navigateGeographically(direction) {
   // Bounding box bounds (viewBox is 0 0 1000 1000)
   newX = Math.max(50, Math.min(950, newX));
   newY = Math.max(50, Math.min(950, newY));
+  
+  if ((newX !== oldX || newY !== oldY) && soundEnabled) {
+    playTick();
+  }
   
   virtualCursor.x = newX;
   virtualCursor.y = newY;
